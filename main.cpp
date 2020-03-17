@@ -4,7 +4,6 @@
 #include "display.h"
 #include "button.h"
 #include "adc.h"
-#include "elapsed_timer.h"
 
 //Todo: make UIElements.cpp/h
 //rename disaply.cpp/h to backgrounds.c/h
@@ -27,7 +26,7 @@ Button config_but;
 Button stop_but;
 Button continue_but;
 Button restart_but;
-ElapsedTimer timer;
+Timer timer;
 
 
 static void app_transition_to(AppStates new_state)
@@ -63,6 +62,7 @@ static void app_transition_to(AppStates new_state)
         break;
         
     case (MEASURING):
+        timer.reset();
         timer.start();
         display_measuring_screen();
         stop_but.draw();
@@ -78,6 +78,8 @@ static void app_transition_to(AppStates new_state)
 
 int main()
 {
+    int last_time_read = 0;
+
     app_transition_to(INITIALIZING);
     
     while (1) {
@@ -97,13 +99,17 @@ int main()
         case (CONFIG):
             break;
             
-        case (MEASURING):
+        case (MEASURING): {
             stop_but.update();
-            timer.update();
+            if (timer.read_ms() > last_time_read) {
+                last_time_read = timer.read_ms();
+                display_time(last_time_read/1000);
+            }
             if (stop_but.is_just_released()) {
                 app_transition_to(MAIN_SCREEN);
             }
             break;
+        }
         
         case (SHOW_RESULTS):
             break;
