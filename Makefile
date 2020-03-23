@@ -14,26 +14,27 @@ else
 endif
 
 OBJDIR := BUILD
-# Move to the build directory
-ifeq (,$(filter $(OBJDIR),$(notdir $(CURDIR))))
-.SUFFIXES:
-mkfile_path := $(abspath $(lastword $(MAKEFILE_LIST)))
-MAKETARGET = '$(MAKE)' --no-print-directory -C $(OBJDIR) -f '$(mkfile_path)' \
-		'SRCDIR=$(CURDIR)' $(MAKECMDGOALS)
-.PHONY: $(OBJDIR) clean
-all:
-	+@$(call MAKEDIR,$(OBJDIR))
-	+@$(MAKETARGET)
-$(OBJDIR): all
-Makefile : ;
-% :: $(OBJDIR) ; :
-clean :
-	$(call RM,$(OBJDIR))
 
-else
+# Move to the build directory
+# ifeq (,$(filter $(OBJDIR),$(notdir $(CURDIR))))
+# .SUFFIXES:
+# mkfile_path := $(abspath $(lastword $(MAKEFILE_LIST)))
+# MAKETARGET = '$(MAKE)' --no-print-directory -C $(OBJDIR) -f '$(mkfile_path)' \
+# 		'SRCDIR=$(CURDIR)' $(MAKECMDGOALS)
+# .PHONY: $(OBJDIR) clean
+# all:
+# 	+@$(call MAKEDIR,$(OBJDIR))
+# 	+@$(MAKETARGET)
+# $(OBJDIR): all
+# Makefile : ;
+# % :: $(OBJDIR) ; :
+# clean :
+# 	$(call RM,$(OBJDIR))
+
+# else
 
 # trick rules into thinking we are in the root, when we are in the bulid dir
-VPATH = ..
+# VPATH = ..
 
 ###############################################################################
 # Project settings
@@ -42,91 +43,94 @@ PROJECT := VM-Z
 TARGET_PATH := /Volumes/DIS_F429ZI/
 
 ###############################################################################
+ELF = $(OBJDIR)/$(PROJECT).elf
+BIN = $(OBJDIR)/$(PROJECT).bin
+HEX = $(OBJDIR)/$(PROJECT).hex
 
-OBJECTS += BSP_DISCO_F429ZI/Drivers/BSP/Components/ili9341/ili9341.o
-OBJECTS += BSP_DISCO_F429ZI/Drivers/BSP/Components/l3gd20/l3gd20.o
-OBJECTS += BSP_DISCO_F429ZI/Drivers/BSP/Components/stmpe811/stmpe811.o
-OBJECTS += BSP_DISCO_F429ZI/Drivers/BSP/STM32F429I-Discovery/stm32f429i_discovery.o
-OBJECTS += BSP_DISCO_F429ZI/Drivers/BSP/STM32F429I-Discovery/stm32f429i_discovery_eeprom.o
-OBJECTS += BSP_DISCO_F429ZI/Drivers/BSP/STM32F429I-Discovery/stm32f429i_discovery_gyroscope.o
-OBJECTS += BSP_DISCO_F429ZI/Drivers/BSP/STM32F429I-Discovery/stm32f429i_discovery_io.o
-OBJECTS += BSP_DISCO_F429ZI/Drivers/BSP/STM32F429I-Discovery/stm32f429i_discovery_lcd.o
-OBJECTS += BSP_DISCO_F429ZI/Drivers/BSP/STM32F429I-Discovery/stm32f429i_discovery_sdram.o
-OBJECTS += BSP_DISCO_F429ZI/Drivers/BSP/STM32F429I-Discovery/stm32f429i_discovery_ts.o
-OBJECTS += BSP_DISCO_F429ZI/Utilities/Fonts/font12.o
-OBJECTS += BSP_DISCO_F429ZI/Utilities/Fonts/font16.o
-OBJECTS += BSP_DISCO_F429ZI/Utilities/Fonts/font20.o
-OBJECTS += BSP_DISCO_F429ZI/Utilities/Fonts/font24.o
-OBJECTS += BSP_DISCO_F429ZI/Utilities/Fonts/font8.o
-OBJECTS += LCD_DISCO_F429ZI/LCD_DISCO_F429ZI.o
-OBJECTS += TS_DISCO_F429ZI/TS_DISCO_F429ZI.o
+OBJECTS += $(OBJDIR)/BSP_DISCO_F429ZI/Drivers/BSP/Components/ili9341/ili9341.o
+OBJECTS += $(OBJDIR)/BSP_DISCO_F429ZI/Drivers/BSP/Components/l3gd20/l3gd20.o
+OBJECTS += $(OBJDIR)/BSP_DISCO_F429ZI/Drivers/BSP/Components/stmpe811/stmpe811.o
+OBJECTS += $(OBJDIR)/BSP_DISCO_F429ZI/Drivers/BSP/STM32F429I-Discovery/stm32f429i_discovery.o
+OBJECTS += $(OBJDIR)/BSP_DISCO_F429ZI/Drivers/BSP/STM32F429I-Discovery/stm32f429i_discovery_eeprom.o
+OBJECTS += $(OBJDIR)/BSP_DISCO_F429ZI/Drivers/BSP/STM32F429I-Discovery/stm32f429i_discovery_gyroscope.o
+OBJECTS += $(OBJDIR)/BSP_DISCO_F429ZI/Drivers/BSP/STM32F429I-Discovery/stm32f429i_discovery_io.o
+OBJECTS += $(OBJDIR)/BSP_DISCO_F429ZI/Drivers/BSP/STM32F429I-Discovery/stm32f429i_discovery_lcd.o
+OBJECTS += $(OBJDIR)/BSP_DISCO_F429ZI/Drivers/BSP/STM32F429I-Discovery/stm32f429i_discovery_sdram.o
+OBJECTS += $(OBJDIR)/BSP_DISCO_F429ZI/Drivers/BSP/STM32F429I-Discovery/stm32f429i_discovery_ts.o
+OBJECTS += $(OBJDIR)/BSP_DISCO_F429ZI/Utilities/Fonts/font12.o
+OBJECTS += $(OBJDIR)/BSP_DISCO_F429ZI/Utilities/Fonts/font16.o
+OBJECTS += $(OBJDIR)/BSP_DISCO_F429ZI/Utilities/Fonts/font20.o
+OBJECTS += $(OBJDIR)/BSP_DISCO_F429ZI/Utilities/Fonts/font24.o
+OBJECTS += $(OBJDIR)/BSP_DISCO_F429ZI/Utilities/Fonts/font8.o
+OBJECTS += $(OBJDIR)/LCD_DISCO_F429ZI/LCD_DISCO_F429ZI.o
+OBJECTS += $(OBJDIR)/TS_DISCO_F429ZI/TS_DISCO_F429ZI.o
 
-SOURCES += $(wildcard ../*.cpp)
-SOURCES += $(wildcard ../*.c)
-OBJECTS += $(addsuffix .o, $(basename $(SOURCES)))
+SOURCES += $(wildcard *.cpp)
+SOURCES += $(wildcard *.c)
+OBJECTS += $(addprefix $(OBJDIR)/, $(addsuffix .o, $(basename $(SOURCES))))
 
 # debug:
 # 	@echo $(SOURCES)
-# 	@echo $(addsuffix .o, $(basename $(SOURCES)))
+# 	@echo $(OBJECTS)
 
 SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/PeripheralPins.o
- SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/analogin_api.o
- SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/analogin_device.o
- SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/analogout_api.o
- SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/analogout_device.o
- SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/can_api.o
- SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/except.o
- SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/flash_api.o
- SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/gpio_api.o
- SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/gpio_irq_api.o
- SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/gpio_irq_device.o
- SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/hal_tick_overrides.o
- SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/i2c_api.o
- SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/lp_ticker.o
- SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/mbed_board.o
- SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/mbed_crc_api.o
- SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/mbed_fault_handler.o
- SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/mbed_overrides.o
- SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/mbed_retarget.o
- SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/mbed_sdk_boot.o
- SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/mbed_tz_context.o
- SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/pinmap.o
- SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/port_api.o
- SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/pwmout_api.o
- SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/pwmout_device.o
- SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/qspi_api.o
- SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/rtc_api.o
- SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/serial_api.o
- SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/serial_device.o
- SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/sleep.o
- SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/spi_api.o
- SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/startup_stm32f429xx.o
- SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/stm32f4xx_hal.o
- SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/stm32f4xx_hal_adc.o
- SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/stm32f4xx_hal_adc_ex.o
- SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/stm32f4xx_hal_can.o
- SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/stm32f4xx_hal_can_legacy.o
- SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/stm32f4xx_hal_cec.o
- SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/stm32f4xx_hal_cortex.o
- SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/stm32f4xx_hal_crc.o
- SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/stm32f4xx_hal_cryp.o
- SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/stm32f4xx_hal_cryp_ex.o
- SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/stm32f4xx_hal_dac.o
- SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/stm32f4xx_hal_dac_ex.o
- SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/stm32f4xx_hal_dcmi.o
- SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/stm32f4xx_hal_dcmi_ex.o
- SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/stm32f4xx_hal_dfsdm.o
- SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/stm32f4xx_hal_dma.o
- SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/stm32f4xx_hal_dma2d.o
- SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/stm32f4xx_hal_dma_ex.o
- SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/stm32f4xx_hal_dsi.o
- SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/stm32f4xx_hal_eth.o
- SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/stm32f4xx_hal_flash.o
- SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/stm32f4xx_hal_flash_ex.o
- SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/stm32f4xx_hal_flash_ramfunc.o
- SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/stm32f4xx_hal_fmpi2c.o
- SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/stm32f4xx_hal_fmpi2c_ex.o
- SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/stm32f4xx_hal_gpio.o
+SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/analogin_api.o
+SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/analogin_device.o
+SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/analogout_api.o
+SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/analogout_device.o
+SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/can_api.o
+SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/except.o
+SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/flash_api.o
+SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/gpio_api.o
+SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/gpio_irq_api.o
+SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/gpio_irq_device.o
+SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/hal_tick_overrides.o
+SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/i2c_api.o
+SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/lp_ticker.o
+SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/mbed_board.o
+SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/mbed_crc_api.o
+SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/mbed_fault_handler.o
+SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/mbed_overrides.o
+SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/mbed_retarget.o
+SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/mbed_sdk_boot.o
+SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/mbed_tz_context.o
+SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/pinmap.o
+SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/port_api.o
+SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/pwmout_api.o
+SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/pwmout_device.o
+SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/qspi_api.o
+SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/rtc_api.o
+SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/serial_api.o
+SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/serial_device.o
+SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/sleep.o
+SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/spi_api.o
+SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/startup_stm32f429xx.o
+SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/stm32f4xx_hal.o
+SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/stm32f4xx_hal_adc.o
+SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/stm32f4xx_hal_adc_ex.o
+SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/stm32f4xx_hal_can.o
+SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/stm32f4xx_hal_can_legacy.o
+SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/stm32f4xx_hal_cec.o
+SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/stm32f4xx_hal_cortex.o
+SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/stm32f4xx_hal_crc.o
+SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/stm32f4xx_hal_cryp.o
+SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/stm32f4xx_hal_cryp_ex.o
+SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/stm32f4xx_hal_dac.o
+SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/stm32f4xx_hal_dac_ex.o
+SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/stm32f4xx_hal_dcmi.o
+SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/stm32f4xx_hal_dcmi_ex.o
+SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/stm32f4xx_hal_dfsdm.o
+SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/stm32f4xx_hal_dma.o
+SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/stm32f4xx_hal_dma2d.o
+SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/stm32f4xx_hal_dma_ex.o
+SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/stm32f4xx_hal_dsi.o
+SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/stm32f4xx_hal_eth.o
+SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/stm32f4xx_hal_flash.o
+SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/stm32f4xx_hal_flash_ex.o
+SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/stm32f4xx_hal_flash_ramfunc.o
+SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/stm32f4xx_hal_fmpi2c.o
+SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/stm32f4xx_hal_fmpi2c_ex.o
+SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/stm32f4xx_hal_gpio.o
 SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/stm32f4xx_hal_hash.o
 SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/stm32f4xx_hal_hash_ex.o
 SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/stm32f4xx_hal_hcd.o
@@ -194,31 +198,30 @@ SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/system_stm32f4xx.o
 SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/trng_api.o
 SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/us_ticker.o
 
-INCLUDE_PATHS += -I../
-INCLUDE_PATHS += -I../.
-INCLUDE_PATHS += -I..//usr/src/mbed-sdk
-INCLUDE_PATHS += -I../BSP_DISCO_F429ZI
-INCLUDE_PATHS += -I../BSP_DISCO_F429ZI/Drivers
-INCLUDE_PATHS += -I../BSP_DISCO_F429ZI/Drivers/BSP
-INCLUDE_PATHS += -I../BSP_DISCO_F429ZI/Drivers/BSP/Components
-INCLUDE_PATHS += -I../BSP_DISCO_F429ZI/Drivers/BSP/Components/Common
-INCLUDE_PATHS += -I../BSP_DISCO_F429ZI/Drivers/BSP/Components/ili9341
-INCLUDE_PATHS += -I../BSP_DISCO_F429ZI/Drivers/BSP/Components/l3gd20
-INCLUDE_PATHS += -I../BSP_DISCO_F429ZI/Drivers/BSP/Components/stmpe811
-INCLUDE_PATHS += -I../BSP_DISCO_F429ZI/Drivers/BSP/STM32F429I-Discovery
-INCLUDE_PATHS += -I../BSP_DISCO_F429ZI/Utilities
-INCLUDE_PATHS += -I../BSP_DISCO_F429ZI/Utilities/Fonts
-INCLUDE_PATHS += -I../LCD_DISCO_F429ZI
-INCLUDE_PATHS += -I../TS_DISCO_F429ZI
-INCLUDE_PATHS += -I../mbed
-INCLUDE_PATHS += -I../mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM
-INCLUDE_PATHS += -I../mbed/drivers
-INCLUDE_PATHS += -I../mbed/hal
-INCLUDE_PATHS += -I../mbed/platform
+INCLUDE_PATHS += -I.
+INCLUDE_PATHS += -I/usr/src/mbed-sdk
+INCLUDE_PATHS += -IBSP_DISCO_F429ZI
+INCLUDE_PATHS += -IBSP_DISCO_F429ZI/Drivers
+INCLUDE_PATHS += -IBSP_DISCO_F429ZI/Drivers/BSP
+INCLUDE_PATHS += -IBSP_DISCO_F429ZI/Drivers/BSP/Components
+INCLUDE_PATHS += -IBSP_DISCO_F429ZI/Drivers/BSP/Components/Common
+INCLUDE_PATHS += -IBSP_DISCO_F429ZI/Drivers/BSP/Components/ili9341
+INCLUDE_PATHS += -IBSP_DISCO_F429ZI/Drivers/BSP/Components/l3gd20
+INCLUDE_PATHS += -IBSP_DISCO_F429ZI/Drivers/BSP/Components/stmpe811
+INCLUDE_PATHS += -IBSP_DISCO_F429ZI/Drivers/BSP/STM32F429I-Discovery
+INCLUDE_PATHS += -IBSP_DISCO_F429ZI/Utilities
+INCLUDE_PATHS += -IBSP_DISCO_F429ZI/Utilities/Fonts
+INCLUDE_PATHS += -ILCD_DISCO_F429ZI
+INCLUDE_PATHS += -ITS_DISCO_F429ZI
+INCLUDE_PATHS += -Imbed
+INCLUDE_PATHS += -Imbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM
+INCLUDE_PATHS += -Imbed/drivers
+INCLUDE_PATHS += -Imbed/hal
+INCLUDE_PATHS += -Imbed/platform
 
-LIBRARY_PATHS := -L../mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM 
+LIBRARY_PATHS := -Lmbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM 
 LIBRARIES := -lmbed 
-LINKER_SCRIPT ?= ../mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/STM32F429xI.ld
+LINKER_SCRIPT ?= mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/STM32F429xI.ld
 
 # Objects and Paths
 ###############################################################################
@@ -429,24 +432,24 @@ ASM_FLAGS += -D__MBED_CMSIS_RTOS_CM
 ASM_FLAGS += -D__FPU_PRESENT=1
 ASM_FLAGS += -D__CMSIS_RTOS
 ASM_FLAGS += -I/usr/src/mbed-sdk
-ASM_FLAGS += -I../BSP_DISCO_F429ZI
-ASM_FLAGS += -I../BSP_DISCO_F429ZI/Drivers
-ASM_FLAGS += -I../BSP_DISCO_F429ZI/Drivers/BSP
-ASM_FLAGS += -I../BSP_DISCO_F429ZI/Drivers/BSP/Components
-ASM_FLAGS += -I../BSP_DISCO_F429ZI/Drivers/BSP/Components/Common
-ASM_FLAGS += -I../BSP_DISCO_F429ZI/Drivers/BSP/Components/ili9341
-ASM_FLAGS += -I../BSP_DISCO_F429ZI/Drivers/BSP/Components/l3gd20
-ASM_FLAGS += -I../BSP_DISCO_F429ZI/Drivers/BSP/Components/stmpe811
-ASM_FLAGS += -I../BSP_DISCO_F429ZI/Drivers/BSP/STM32F429I-Discovery
-ASM_FLAGS += -I../BSP_DISCO_F429ZI/Utilities
-ASM_FLAGS += -I../BSP_DISCO_F429ZI/Utilities/Fonts
-ASM_FLAGS += -I../LCD_DISCO_F429ZI
-ASM_FLAGS += -I../TS_DISCO_F429ZI
-ASM_FLAGS += -I../mbed
-ASM_FLAGS += -I../mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM
-ASM_FLAGS += -I../mbed/drivers
-ASM_FLAGS += -I../mbed/hal
-ASM_FLAGS += -I../mbed/platform
+ASM_FLAGS += -IBSP_DISCO_F429ZI
+ASM_FLAGS += -IBSP_DISCO_F429ZI/Drivers
+ASM_FLAGS += -IBSP_DISCO_F429ZI/Drivers/BSP
+ASM_FLAGS += -IBSP_DISCO_F429ZI/Drivers/BSP/Components
+ASM_FLAGS += -IBSP_DISCO_F429ZI/Drivers/BSP/Components/Common
+ASM_FLAGS += -IBSP_DISCO_F429ZI/Drivers/BSP/Components/ili9341
+ASM_FLAGS += -IBSP_DISCO_F429ZI/Drivers/BSP/Components/l3gd20
+ASM_FLAGS += -IBSP_DISCO_F429ZI/Drivers/BSP/Components/stmpe811
+ASM_FLAGS += -IBSP_DISCO_F429ZI/Drivers/BSP/STM32F429I-Discovery
+ASM_FLAGS += -IBSP_DISCO_F429ZI/Utilities
+ASM_FLAGS += -IBSP_DISCO_F429ZI/Utilities/Fonts
+ASM_FLAGS += -ILCD_DISCO_F429ZI
+ASM_FLAGS += -ITS_DISCO_F429ZI
+ASM_FLAGS += -Imbed
+ASM_FLAGS += -Imbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM
+ASM_FLAGS += -Imbed/drivers
+ASM_FLAGS += -Imbed/hal
+ASM_FLAGS += -Imbed/platform
 ASM_FLAGS += -include
 ASM_FLAGS += /filer/workspace_data/exports/0/03b50b28e9e17a55b496cbc8d49e1237/VM-Z/mbed_config.h
 ASM_FLAGS += -x
@@ -486,45 +489,45 @@ LD_SYS_LIBS :=-Wl,--start-group -lstdc++ -lsupc++ -lm -lc -lgcc -lnosys -lmbed -
 all: $(PROJECT).bin $(PROJECT).hex size
 	cp $(PROJECT).bin $(TARGET_PATH)
 
-.s.o:
+$(OBJDIR)/%.o: %.S
 	+@$(call MAKEDIR,$(dir $@))
 	+@echo "Assemble: $(notdir $<)"
 	@$(AS) -c $(ASM_FLAGS) -o $@ $<
 
-.S.o:
+$(OBJDIR)/%.o: %.s
 	+@$(call MAKEDIR,$(dir $@))
 	+@echo "Assemble: $(notdir $<)"
 	@$(AS) -c $(ASM_FLAGS) -o $@ $<
 
-.c.o:
+$(OBJDIR)/%.o: %.c $(OBJDIR)/%.d
 	+@$(call MAKEDIR,$(dir $@))
 	+@echo "Compile: $(notdir $<)"
 	@$(CC) $(C_FLAGS) $(INCLUDE_PATHS) -o $@ $<
 
-.cpp.o:
+$(OBJDIR)/%.o: %.cpp $(OBJDIR)/%.d
 	+@$(call MAKEDIR,$(dir $@))
-	+@echo "Compile: $(notdir $<)"
+	+@echo "Compile: $(notdir $<) to $@"
 	@$(CPP) $(CXX_FLAGS) $(INCLUDE_PATHS) -o $@ $<
 
 $(PROJECT).link_script.ld: $(LINKER_SCRIPT)
 	@$(PREPROC) $< -o $@
 
-$(PROJECT).elf: $(OBJECTS) $(SYS_OBJECTS) $(PROJECT).link_script.ld 
+
+$(ELF): $(OBJECTS) $(SYS_OBJECTS) $(PROJECT).link_script.ld 
 	+@echo "$(filter %.o, $^)" > .link_options.txt
 	+@echo "link: $(notdir $@)"
 	@$(LD) $(LD_FLAGS) -T $(filter-out %.o, $^) $(LIBRARY_PATHS) --output $@ @.link_options.txt $(LIBRARIES) $(LD_SYS_LIBS)
 
-$(PROJECT).bin: $(PROJECT).elf
+$(PROJECT).bin: $(ELF)
 	$(ELF2BIN) -O binary $< $@
 	+@echo "===== bin file ready to flash: $(OBJDIR)/$@ =====" 
 
-$(PROJECT).hex: $(PROJECT).elf
+$(PROJECT).hex: $(ELF)
 	$(ELF2BIN) -O ihex $< $@
 
 
 DEPS = $(OBJECTS:.o=.d) $(SYS_OBJECTS:.o=.d)
 -include $(DEPS)
-endif
 
 
 %: ;
