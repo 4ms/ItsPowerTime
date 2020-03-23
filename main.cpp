@@ -4,6 +4,7 @@
 #include "display.h"
 #include "button.h"
 #include "adc.h"
+#include "measurementTimer.h"
 
 //Todo: make UIElements.cpp/h
 //rename disaply.cpp/h to backgrounds.c/h
@@ -26,7 +27,7 @@ Button config_but;
 Button stop_but;
 Button continue_but;
 Button restart_but;
-Timer timer;
+MeasurementTimer timer;
 
 
 static void app_transition_to(AppStates new_state)
@@ -78,8 +79,6 @@ static void app_transition_to(AppStates new_state)
 
 int main()
 {
-    int last_time_read = 0;
-
     app_transition_to(INITIALIZING);
     
     while (1) {
@@ -101,9 +100,9 @@ int main()
             
         case (MEASURING): {
             stop_but.update();
-            if (timer.read_ms() > last_time_read) {
-                last_time_read = timer.read_ms();
-                display_time(last_time_read/1000);
+            if (timer.read_ms() > timer.last_time_read) {
+                timer.last_time_read = timer.read_ms();
+                display_time((float)timer.last_time_read/1000.0f);
             }
             if (stop_but.is_just_released()) {
                 app_transition_to(MAIN_SCREEN);
@@ -125,3 +124,4 @@ void show_debug_xytouch() {
     sprintf((char*)debugtxt, "%c x=%d y=%d    ", touched ? 'X' : ' ', x, y);
     display_debug_info(debugtxt);   
 }
+

@@ -41,11 +41,12 @@ void display_measuring_screen() {
     display_string(0, LINE(1), "Time Elapsed:", LEFT_MODE);
 }
 
-void display_time(uint32_t tm) {
+void display_time(float tm) {
     set_bg_color(LCD_COLOR_YELLOW);
     set_fg_color(LCD_COLOR_BLACK);
     set_font_size(FONT_SIZE_BIG);
     char tm_string[20];
-    utoa(tm, tm_string, 10);
-    display_string(0, LINE(2), tm_string, LEFT_MODE);
+	int ret = snprintf(tm_string, sizeof tm_string, "%0.1f", tm);
+	if (ret>=0)
+		display_string(0, LINE(2), tm_string, LEFT_MODE);
 }
