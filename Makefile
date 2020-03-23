@@ -468,6 +468,8 @@ LD_SYS_LIBS :=-Wl,--start-group -lstdc++ -lsupc++ -lm -lc -lgcc -lnosys -lmbed -
 
 
 all: $(BIN) $(HEX) size
+	
+flash: $(BIN) $(HEX) size
 	cp $(BIN) $(TARGET_PATH)
 
 $(OBJDIR)/%.o: %.S
