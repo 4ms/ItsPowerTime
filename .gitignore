@@ -1,3 +1,8 @@
 *.o
 *.d
+*.bin
+*.hex
+.link_options.txt
+VM-Z.link_script.ld
 BUILD
+.mbed
