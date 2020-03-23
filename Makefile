@@ -12,7 +12,7 @@ ifeq ($(shell echo $$OS),$$OS)
     RM = rmdir /S /Q "$(1)"
 else
     MAKEDIR = '$(SHELL)' -c "mkdir -p \"$(1)\""
-    RM = '$(SHELL)' -c "rm -rf \"$(1)\""
+    RM = $(SHELL) -c "rm -rf $(1)"
 endif
 
 OBJDIR := BUILD
@@ -511,7 +511,8 @@ DEPS = $(OBJECTS:.o=.d) $(SYS_OBJECTS:.o=.d)
 -include $(DEPS)
 
 clean:
-	rm -rf $(OBJDIR)
+	$(call RM, $(OBJDIR))
 
 %: ;
 
+# $(RM) -rf $(OBJDIR)
