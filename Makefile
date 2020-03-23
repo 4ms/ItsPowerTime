@@ -9,7 +9,7 @@
 # cross-platform directory manipulation
 ifeq ($(shell echo $$OS),$$OS)
     MAKEDIR = if not exist "$(1)" mkdir "$(1)"
-    RM = rmdir /S /Q "$(1)"
+    RM = rmdir /S /Q $(1)
 else
     MAKEDIR = '$(SHELL)' -c "mkdir -p \"$(1)\""
     RM = $(SHELL) -c "rm -rf $(1)"
