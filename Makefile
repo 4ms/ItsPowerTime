@@ -46,8 +46,9 @@ OBJECTS += $(OBJDIR)/BSP_DISCO_F429ZI/Utilities/Fonts/font8.o
 OBJECTS += $(OBJDIR)/LCD_DISCO_F429ZI/LCD_DISCO_F429ZI.o
 OBJECTS += $(OBJDIR)/TS_DISCO_F429ZI/TS_DISCO_F429ZI.o
 
-SOURCES += $(wildcard *.cpp)
-SOURCES += $(wildcard *.c)
+#SOURCES += $(wildcard *.cpp)
+#SOURCES += $(wildcard *.c)
+SOURCES = adc.cpp button.cpp display.cpp display_wrapper.cpp main.cpp measurementTimer.cpp ts.cpp 
 OBJECTS += $(addprefix $(OBJDIR)/, $(addsuffix .o, $(basename $(SOURCES))))
 
 # debug:
@@ -180,7 +181,7 @@ SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/trng_api.o
 SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/us_ticker.o
 
 INCLUDE_PATHS += -I.
-INCLUDE_PATHS += -I/usr/src/mbed-sdk
+#INCLUDE_PATHS += -I/usr/src/mbed-sdk
 INCLUDE_PATHS += -IBSP_DISCO_F429ZI
 INCLUDE_PATHS += -IBSP_DISCO_F429ZI/Drivers
 INCLUDE_PATHS += -IBSP_DISCO_F429ZI/Drivers/BSP
@@ -211,7 +212,7 @@ LINKER_SCRIPT ?= mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/STM32F429xI.ld
 AS      = arm-none-eabi-gcc
 CC      = arm-none-eabi-gcc
 CPP     = arm-none-eabi-g++
-LD      = arm-none-eabi-gcc
+LD      = arm-none-eabi-g++
 ELF2BIN = arm-none-eabi-objcopy
 PREPROC = arm-none-eabi-cpp -E -P -Wl,--gc-sections -Wl,--wrap,main -Wl,--wrap,_malloc_r -Wl,--wrap,_free_r -Wl,--wrap,_realloc_r -Wl,--wrap,_memalign_r -Wl,--wrap,_calloc_r -Wl,--wrap,exit -Wl,--wrap,atexit -Wl,-n -mcpu=cortex-m4 -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=softfp -DMBED_ROM_START=0x8000000 -DMBED_ROM_SIZE=0x200000 -DMBED_RAM1_START=0x10000000 -DMBED_RAM1_SIZE=0x10000 -DMBED_RAM_START=0x20000000 -DMBED_RAM_SIZE=0x30000 -DMBED_BOOT_STACK_SIZE=4096 -DXIP_ENABLE=0
 
@@ -412,7 +413,7 @@ ASM_FLAGS += -DARM_MATH_CM4
 ASM_FLAGS += -D__MBED_CMSIS_RTOS_CM
 ASM_FLAGS += -D__FPU_PRESENT=1
 ASM_FLAGS += -D__CMSIS_RTOS
-ASM_FLAGS += -I/usr/src/mbed-sdk
+#ASM_FLAGS += -I/usr/src/mbed-sdk
 ASM_FLAGS += -IBSP_DISCO_F429ZI
 ASM_FLAGS += -IBSP_DISCO_F429ZI/Drivers
 ASM_FLAGS += -IBSP_DISCO_F429ZI/Drivers/BSP
@@ -432,7 +433,7 @@ ASM_FLAGS += -Imbed/drivers
 ASM_FLAGS += -Imbed/hal
 ASM_FLAGS += -Imbed/platform
 ASM_FLAGS += -include
-ASM_FLAGS += /filer/workspace_data/exports/0/03b50b28e9e17a55b496cbc8d49e1237/VM-Z/mbed_config.h
+#ASM_FLAGS += /filer/workspace_data/exports/0/03b50b28e9e17a55b496cbc8d49e1237/VM-Z/mbed_config.h
 ASM_FLAGS += -x
 ASM_FLAGS += assembler-with-cpp
 ASM_FLAGS += -c
@@ -457,8 +458,15 @@ ASM_FLAGS += -mfpu=fpv4-sp-d16
 ASM_FLAGS += -mfloat-abi=softfp
 
 
-LD_FLAGS :=-Wl,--gc-sections -Wl,--wrap,main -Wl,--wrap,_malloc_r -Wl,--wrap,_free_r -Wl,--wrap,_realloc_r -Wl,--wrap,_memalign_r -Wl,--wrap,_calloc_r -Wl,--wrap,exit -Wl,--wrap,atexit -Wl,-n -mcpu=cortex-m4 -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=softfp -DMBED_ROM_START=0x8000000 -DMBED_ROM_SIZE=0x200000 -DMBED_RAM1_START=0x10000000 -DMBED_RAM1_SIZE=0x10000 -DMBED_RAM_START=0x20000000 -DMBED_RAM_SIZE=0x30000 -DMBED_BOOT_STACK_SIZE=4096 -DXIP_ENABLE=0 
-LD_SYS_LIBS :=-Wl,--start-group -lstdc++ -lsupc++ -lm -lc -lgcc -lnosys -lmbed -Wl,--end-group
+#LD_FLAGS :=-Wl,--gc-sections -Wl,--wrap,main -Wl,--wrap,_malloc_r -Wl,--wrap,_free_r -Wl,--wrap,_realloc_r -Wl,--wrap,_memalign_r -Wl,--wrap,_calloc_r -Wl,--wrap,exit -Wl,--wrap,atexit -Wl,-n -mcpu=cortex-m4 -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=softfp -DMBED_ROM_START=0x8000000 -DMBED_ROM_SIZE=0x200000 -DMBED_RAM1_START=0x10000000 -DMBED_RAM1_SIZE=0x10000 -DMBED_RAM_START=0x20000000 -DMBED_RAM_SIZE=0x30000 -DMBED_BOOT_STACK_SIZE=4096 -DXIP_ENABLE=0 
+LD_FLAGS :=-Wl,--gc-sections \
+	-Wl,-Map,main.map \
+	-Wl,-n \
+	-mcpu=cortex-m4 \
+	-mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=softfp \
+	-DMBED_ROM_START=0x8000000 \
+	-DMBED_ROM_SIZE=0x200000 -DMBED_RAM1_START=0x10000000 -DMBED_RAM1_SIZE=0x10000 -DMBED_RAM_START=0x20000000 -DMBED_RAM_SIZE=0x30000 -DMBED_BOOT_STACK_SIZE=4096 -DXIP_ENABLE=0 
+LD_SYS_LIBS :=-specs=nosys.specs -Wl,--start-group -lstdc++ -lsupc++ -lm -lc -lgcc -lnosys -lmbed -Wl,--end-group
 
 # Tools and Flags
 ###############################################################################
@@ -499,11 +507,11 @@ $(OBJDIR)/$(PROJECT).link_script.ld: $(LINKER_SCRIPT)
 $(ELF): $(OBJECTS) $(SYS_OBJECTS) $(OBJDIR)/$(PROJECT).link_script.ld 
 	+@echo "$(filter %.o, $^)" > $(OBJDIR)/.link_options.txt
 	+@echo "link: $(notdir $@)"
-	@$(LD) $(LD_FLAGS) -T $(filter-out %.o, $^) $(LIBRARY_PATHS) --output $@ @$(OBJDIR)/.link_options.txt $(LIBRARIES) $(LD_SYS_LIBS)
+	$(LD) $(LD_FLAGS) -T $(filter-out %.o, $^) $(LIBRARY_PATHS) --output $@ @$(OBJDIR)/.link_options.txt $(LIBRARIES) $(LD_SYS_LIBS)
 
 $(BIN): $(ELF)
 	$(ELF2BIN) -O binary $< $@
-	+@echo "===== bin file ready to flash: $(OBJDIR)/$@ =====" 
+	+@echo "===== bin file ready to flash: $@ =====" 
 
 $(HEX): $(ELF)
 	$(ELF2BIN) -O ihex $< $@
