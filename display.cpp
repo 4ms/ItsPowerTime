@@ -46,7 +46,11 @@ void display_time(float tm) {
     set_fg_color(LCD_COLOR_BLACK);
     set_font_size(FONT_SIZE_BIG);
     char tm_string[20];
-	int ret = snprintf(tm_string, sizeof tm_string, "%0.1f", tm);
+    int minutes;
+    float seconds;
+    minutes = tm / 60;
+    seconds = tm - (minutes*60);
+    int ret = snprintf(tm_string, sizeof tm_string, "%d:%05.02f", minutes, seconds);
 	if (ret>=0)
-		display_string(0, LINE(2), tm_string, LEFT_MODE);
+	   display_string(0, LINE(2), tm_string, LEFT_MODE);
 }
