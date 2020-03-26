@@ -50,7 +50,7 @@ void display_time(float tm) {
     float seconds;
     minutes = tm / 60;
     seconds = tm - (minutes*60);
-    int ret = snprintf(tm_string, sizeof tm_string, "%d:%05.02f", minutes, seconds);
+    int ret = snprintf(tm_string, sizeof tm_string, "%d:%04.01f", minutes, seconds);
 	if (ret>=0)
 	   display_string(0, LINE(2), tm_string, LEFT_MODE);
 }
