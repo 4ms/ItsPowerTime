@@ -7,3 +7,4 @@
 VM-Z.link_script.ld
 BUILD
 .mbed
+*.map
