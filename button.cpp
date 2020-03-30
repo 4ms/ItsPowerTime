@@ -38,7 +38,9 @@ void create_stop_button(Button &but) {
 
 void Button::_draw(uint32_t bg, uint32_t textcolor) {
     set_fg_color(bg);
-    fill_rect(rect.x, rect.y, rect.width, rect.height);
+    //fill_rect(rect.x, rect.y, rect.width, rect.height);
+	uint16_t radius = 10;
+	fill_rounded_rect(rect.x, rect.y, rect.width, rect.height, radius);
     
     set_bg_color(bg);
     set_fg_color(textcolor);
