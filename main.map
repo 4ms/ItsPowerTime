@@ -32047,13 +32047,13 @@ OUTPUT(BUILD/VM-Z.elf elf32-littlearm)
                                        0x16f7 (size before relaxing)
  .debug_str     0x000000000000484d      0xcf5 BUILD/adc.o
                                        0x21ac (size before relaxing)
- .debug_str     0x0000000000005542     0x507b BUILD/button.o
-                                       0x67dc (size before relaxing)
- .debug_str     0x000000000000a5bd      0x19a BUILD/display.o
+ .debug_str     0x0000000000005542     0x5084 BUILD/button.o
+                                       0x67e5 (size before relaxing)
+ .debug_str     0x000000000000a5c6      0x19a BUILD/display.o
                                        0x15d9 (size before relaxing)
- .debug_str     0x000000000000a757       0x8b BUILD/display_wrapper.o
+ .debug_str     0x000000000000a760       0x8b BUILD/display_wrapper.o
                                        0x1ebb (size before relaxing)
- .debug_str     0x000000000000a7e2     0x4e56 BUILD/main.o
+ .debug_str     0x000000000000a7eb     0x4e4d BUILD/main.o
                                        0xb78e (size before relaxing)
  .debug_str     0x000000000000f638       0x2f BUILD/measurementTimer.o
                                         0xdcd (size before relaxing)

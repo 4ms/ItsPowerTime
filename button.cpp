@@ -24,16 +24,16 @@ void create_config_button(Button &config_but) {
     config_but.bg_color = LCD_COLOR_YELLOW;
 }
 
-void create_stop_button(Button &but) {
-    but.rect.x = 60;
-    but.rect.y = 200;
-    but.rect.width = 120;
-    but.rect.height = 60;
+void create_stop_button(Button &stop_but) {
+    stop_but.rect.x = 60;
+    stop_but.rect.y = 200;
+    stop_but.rect.width = 120;
+    stop_but.rect.height = 60;
     
-    but.text = "STOP";
-    but.fontsize = FONT_SIZE_MED;
-    but.text_color = LCD_COLOR_WHITE;
-    but.bg_color = LCD_COLOR_RED;
+    stop_but.text = "STOP";
+    stop_but.fontsize = FONT_SIZE_MED;
+    stop_but.text_color = LCD_COLOR_WHITE;
+    stop_but.bg_color = LCD_COLOR_RED;
 }
 
 void Button::_draw(uint32_t bg, uint32_t textcolor) {
