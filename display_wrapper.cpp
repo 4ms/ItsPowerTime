@@ -34,19 +34,17 @@ void fill_screen(uint32_t color) {
     lcd.Clear(color);
 }
 
-void fill_rect(uint16_t x, uint16_t y, uint16_t height, uint16_t width) {
-    lcd.FillRect(x, y, height, width);
+void fill_rect(uint16_t x, uint16_t y, uint16_t width, uint16_t height) {
+    lcd.FillRect(x, y, width, height);
 }
 
-void fill_rounded_rect(uint16_t x, uint16_t y, uint16_t height, uint16_t width, uint16_t radius) {
-    ///Todo: code here!
-    lcd.FillRect(x + radius, y, height, width - 2 * radius);
-    lcd.FillRect(x, y + radius, height - 2 * radius, width);
+void fill_rounded_rect(uint16_t x, uint16_t y, uint16_t width, uint16_t height, uint16_t radius) {
+    lcd.FillRect(x + radius, y, width - 2 * radius, height);
+    lcd.FillRect(x, y + radius, width, height - 2 * radius);
     lcd.FillCircle(x + radius, y + radius, radius);
     lcd.FillCircle(x + width - radius, y + radius, radius);
     lcd.FillCircle(x + radius, y + height - radius, radius);
     lcd.FillCircle(x + width - radius, y + height - radius, radius);
-    
 }
 
 void display_string(uint16_t X, uint16_t Y, const char *pText, Text_AlignModeTypdef mode) {
