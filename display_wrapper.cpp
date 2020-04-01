@@ -37,14 +37,14 @@ void fill_screen(uint32_t color) {
 void fill_rect(uint16_t x, uint16_t y, uint16_t width, uint16_t height) {
     lcd.FillRect(x, y, width, height);
 }
-
+//added -1 to x and y values for circles 2,3 and 4 to make look smoother
 void fill_rounded_rect(uint16_t x, uint16_t y, uint16_t width, uint16_t height, uint16_t radius) {
     lcd.FillRect(x + radius, y, width - 2 * radius, height);
     lcd.FillRect(x, y + radius, width, height - 2 * radius);
     lcd.FillCircle(x + radius, y + radius, radius);
-    lcd.FillCircle(x + width - radius, y + radius, radius);
-    lcd.FillCircle(x + radius, y + height - radius, radius);
-    lcd.FillCircle(x + width - radius, y + height - radius, radius);
+    lcd.FillCircle(x + width - radius - 1, y + radius, radius);
+    lcd.FillCircle(x + radius, y + height - radius - 1, radius);
+    lcd.FillCircle(x + width - radius - 1, y + height - radius -1, radius);
 }
 
 void display_string(uint16_t X, uint16_t Y, const char *pText, Text_AlignModeTypdef mode) {

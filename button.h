@@ -5,7 +5,7 @@
 class Button {
 
 public:
-    Rect rect;
+    RoundedRect rect;
     std::string text;
     uint32_t text_color;
     uint32_t bg_color;

@@ -36,7 +36,7 @@ bool ts_is_touch_detected(uint16_t &x, uint16_t &y) {
     }
 }
 
-TouchShapeStates ts_touch_within_rect(Rect &r) {
+TouchShapeStates ts_touch_within_rect(RoundedRect &r) {
     uint16_t x, y;
     
     if (ts_is_touch_detected(x, y)) {
