@@ -1,8 +1,12 @@
 #include "mbed.h"
 
-AnalogIn adc12V(PA_2);
-AnalogIn adc5V(PA_4);
-AnalogIn adcN12V(PA_6);
+AnalogIn adc12V(PA_5); //CH5
+AnalogIn adc5V(PA_1); //CH1
+AnalogIn adcN12V(PA_7); //CH7
+AnalogIn adc12A(PC_4); //CH14
+AnalogIn adc5A(PA_2); //CH2
+AnalogIn adcN12A(PF_6); //CH4
+
 
 //            float adc12V_involts = adc12V.read() * 24.0f;
 //            sprintf((char*)text, "+12V = %.2f", adc12V_involts);
