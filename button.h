@@ -1,3 +1,5 @@
+#pragma once
+
 #include <string>
 #include "display_wrapper.h"
 #include "ts.h"
@@ -26,6 +28,3 @@ private:
     bool _drawn_normal;
 };
 
-void create_start_button(Button &start);
-void create_config_button(Button &config);
-void create_stop_button(Button &but);

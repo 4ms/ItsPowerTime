@@ -7,8 +7,8 @@ struct psProfile {
 };
 
 struct psProfiles {
-	static inline constexpr psProfile MiniPower = {
-		100, 250, 400
+	static inline constexpr psProfile TestPS = {
+		300, 600, 500
 	};
 	static constexpr psProfile RowPower25 = {
 		1000, 1250, 1000

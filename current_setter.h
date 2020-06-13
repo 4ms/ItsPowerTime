@@ -11,6 +11,7 @@ public:
 	void start();
 	void stop();
 	void set_profile(const psProfile &ps);
+	psProfile get_profile();
 	void set_N12V_mA(uint16_t mA);
 	void set_12V_mA(uint16_t mA);
 	void set_5V_mA(uint16_t mA);

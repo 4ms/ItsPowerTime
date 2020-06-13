@@ -23,19 +23,25 @@ enum AppStates {
 };
 
 AppStates app_state;
-Button start_but;
-Button config_but;
-Button stop_but;
-Button continue_but;
-Button restart_but;
 MeasurementTimer timer;
 CurrentSetter currentSetter;
+
+Button MainPage::start_but;
+Button MainPage::config_but;
+Button MeasuringPage::stop_but;
+Button ConfigPage::TestPS_but;
+Button ConfigPage::RP25_but;
+Button ConfigPage::RP35_but;
+Button ConfigPage::RP45_but;
+MainPage mainPage;
+ConfigPage configPage;
+MeasuringPage measureingPage;
 
 static void app_transition_to(AppStates new_state)
 {
 	switch (new_state) {
 	case (INITIALIZING): {
-		display_splash_screen();
+		SplashPage::display();
 		wait(2);
 
 		uint32_t display_size_x = get_display_size_x();
@@ -44,34 +50,31 @@ static void app_transition_to(AppStates new_state)
 		bool success = ts_init(display_size_x, display_size_y);
 
 		if (!success) {
-			display_failed_ts_init();
+			TSErrorPage::display();
 			while(true) {;}
 		}
-
-		create_start_button(start_but);
-		create_config_button(config_but);
-		create_stop_button(stop_but);
+		//Default Power Supply
+		currentSetter.set_profile(psProfiles::TestPS);
 		break;
 	}
 
 	case (MAIN_SCREEN):
 		currentSetter.stop();
-		display_main_screen();
-		start_but.draw();
-		config_but.draw();
+		MainPage::display();
 		break;
 
 	case (CONFIG):
+		ConfigPage::display();
 		break;
 
-	case (MEASURING):
+	case (MEASURING): {
 		timer.reset();
 		timer.start();
-		currentSetter.set_profile(psProfiles::MiniPower);
 		currentSetter.start();
-		display_measuring_screen();
-		stop_but.draw();
+		auto ps = currentSetter.get_profile();
+		MeasuringPage::display(ps);
 		break;
+	}
 
 	case (SHOW_RESULTS):
 		break;
@@ -91,24 +94,41 @@ int main()
 			app_transition_to(MAIN_SCREEN);
 			break;
 
-		case (MAIN_SCREEN):
-			start_but.update();
-			config_but.update();
-			if (start_but.is_just_released()) {
+		case (MAIN_SCREEN): {
+			MainPage::update();
+			if (MainPage::start_but.is_just_released()) {
 				app_transition_to(MEASURING);
 			}
+			if (MainPage::config_but.is_just_released()) {
+				app_transition_to(CONFIG);
+			}
 			break;
+		}
 
-		case (CONFIG):
+		case (CONFIG): {
+			ConfigPage::update();
+			if (ConfigPage::TestPS_but.is_just_released()) {
+				currentSetter.set_profile(psProfiles::TestPS);
+				app_transition_to(MAIN_SCREEN);
+			}
+			if (ConfigPage::RP25_but.is_just_released()) {
+				currentSetter.set_profile(psProfiles::RowPower25);
+				app_transition_to(MAIN_SCREEN);
+			}
+			if (ConfigPage::RP35_but.is_just_released()) {
+				currentSetter.set_profile(psProfiles::RowPower35);
+				app_transition_to(MAIN_SCREEN);
+			}
+			if (ConfigPage::RP45_but.is_just_released()) {
+				currentSetter.set_profile(psProfiles::RowPower45);
+				app_transition_to(MAIN_SCREEN);
+			}
 			break;
+		}
 
 		case (MEASURING): {
-			stop_but.update();
-			if (timer.read_ms() > timer.last_time_read) {
-				timer.last_time_read = timer.read_ms();
-				display_time((float)timer.last_time_read/1000.0f);
-			}
-			if (stop_but.is_just_released()) {
+			MeasuringPage::update(timer);
+			if (MeasuringPage::stop_but.is_just_released()) {
 				app_transition_to(MAIN_SCREEN);
 			}
 			break;

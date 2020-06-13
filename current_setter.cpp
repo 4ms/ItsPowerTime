@@ -30,6 +30,11 @@ void CurrentSetter::set_profile(const psProfile &ps) {
 	set_N12V_mA(ps.mA_N12V);
 }
 
+psProfile CurrentSetter::get_profile() {
+	psProfile ps {mA12, mA5, mAN12};
+	return ps;
+}
+
 void CurrentSetter::set_12V_mA(uint16_t mA) {
 	mA12 = mA;
 }

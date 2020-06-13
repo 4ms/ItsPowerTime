@@ -1,44 +1,5 @@
 #include "button.h"
 
-void create_start_button(Button &start_but) {
-    start_but.rect.x = 60;
-    start_but.rect.y = 60;
-    start_but.rect.width = 120;
-    start_but.rect.height = 80;
-    start_but.rect.radius = 5;
-    
-    start_but.text = "START";
-    start_but.fontsize = FONT_SIZE_BIG;
-    start_but.text_color = LCD_COLOR_WHITE;
-    start_but.bg_color = LCD_COLOR_BLUE;
-}
-
-void create_config_button(Button &config_but) {
-    config_but.rect.x = 140;
-    config_but.rect.y = 270;
-    config_but.rect.width = 100;
-    config_but.rect.height = 50;
-    config_but.rect.radius = 7;
-    
-    config_but.text = "Config";
-    config_but.fontsize = FONT_SIZE_SMALL;
-    config_but.text_color = LCD_COLOR_GREEN;
-    config_but.bg_color = LCD_COLOR_YELLOW;
-}
-
-void create_stop_button(Button &stop_but) {
-    stop_but.rect.x = 60;
-    stop_but.rect.y = 200;
-    stop_but.rect.width = 120;
-    stop_but.rect.height = 60;
-    stop_but.rect.radius = 15;
-    
-    stop_but.text = "STOP";
-    stop_but.fontsize = FONT_SIZE_MED;
-    stop_but.text_color = LCD_COLOR_WHITE;
-    stop_but.bg_color = LCD_COLOR_RED;
-}
-
 void Button::_draw(uint32_t bg, uint32_t textcolor) {
     set_fg_color(bg);
     //fill_rect(rect.x, rect.y, rect.width, rect.height);
