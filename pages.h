@@ -6,14 +6,14 @@
 // class Page {
 // public:
 // 	Page();
-//     static void display() = 0;
+//	 static void display() = 0;
 // 	static void update() = 0;
 // };
 
 class ConfigPage {
 public:
 	ConfigPage();
-    static void display();
+	static void display();
 	static void update();
 
 	static Button TestPS_but;
@@ -25,17 +25,17 @@ public:
 class MainPage {
 public:
 	MainPage();
-    void display();
-	void update();
+	static void display();
+	static void update();
 
-	Button start_but;
-	Button config_but;
+	static Button start_but;
+	static Button config_but;
 };
 
 class SplashPage {
 public:
 	SplashPage();
-    static void display();
+	static void display();
 	static void update();
 
 };
@@ -43,7 +43,7 @@ public:
 class TSErrorPage {
 public:
 	TSErrorPage();
-    static void display();
+	static void display();
 	static void update();
 
 };
@@ -51,7 +51,7 @@ public:
 class MeasuringPage {
 public:
 	MeasuringPage();
-    static void display(psProfile& ps);
+	static void display(psProfile& ps);
 	static void update(MeasurementTimer& timer);
 	static void display_time(float tm);
 
