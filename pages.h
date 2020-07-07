@@ -3,6 +3,13 @@
 #include "ps_profiles.h"
 #include "measurementTimer.h"
 
+// class Page {
+// public:
+// 	Page();
+//     static void display() = 0;
+// 	static void update() = 0;
+// };
+
 class ConfigPage {
 public:
 	ConfigPage();
@@ -18,11 +25,11 @@ public:
 class MainPage {
 public:
 	MainPage();
-    static void display();
-	static void update();
+    void display();
+	void update();
 
-	static Button start_but;
-	static Button config_but;
+	Button start_but;
+	Button config_but;
 };
 
 class SplashPage {

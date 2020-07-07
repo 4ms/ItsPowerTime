@@ -50,7 +50,7 @@ OBJECTS += $(OBJDIR)/TS_DISCO_F429ZI/TS_DISCO_F429ZI.o
 #SOURCES += $(wildcard *.c)
 SOURCES = adc.cpp \
 		button.cpp \
-		display.cpp \
+		pages.cpp \
 		display_wrapper.cpp \
 		main.cpp \
 		measurementTimer.cpp \
@@ -294,7 +294,6 @@ C_FLAGS += -Wall
 C_FLAGS += -Wextra
 C_FLAGS += -Wno-unused-parameter
 C_FLAGS += -Wno-missing-field-initializers
-C_FLAGS += -Wno-register
 C_FLAGS += -fmessage-length=0
 C_FLAGS += -fno-exceptions
 C_FLAGS += -ffunction-sections

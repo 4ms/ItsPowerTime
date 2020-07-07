@@ -1,4 +1,4 @@
-#include "display.h"
+#include "pages.h"
 #include "display_wrapper.h"
 
 void TSErrorPage::display() {

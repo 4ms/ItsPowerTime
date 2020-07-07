@@ -1,16 +1,11 @@
 #include "mbed.h"
 #include "ts.h"
 #include "display_wrapper.h"
-#include "display.h"
+#include "pages.h"
 #include "button.h"
 #include "adc.h"
 #include "measurementTimer.h"
 #include "current_setter.h"
-
-//Todo: make UIElements.cpp/h
-//rename disaply.cpp/h to backgrounds.c/h
-//UIElements contains the buttons and backgrounds
-//if (ui.stop_but.is_just_pressed())
 
 void show_debug_xytouch();
 
@@ -33,6 +28,7 @@ Button ConfigPage::TestPS_but;
 Button ConfigPage::RP25_but;
 Button ConfigPage::RP35_but;
 Button ConfigPage::RP45_but;
+
 MainPage mainPage;
 ConfigPage configPage;
 MeasuringPage measureingPage;
