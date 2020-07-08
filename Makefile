@@ -50,7 +50,11 @@ OBJECTS += $(OBJDIR)/TS_DISCO_F429ZI/TS_DISCO_F429ZI.o
 #SOURCES += $(wildcard *.c)
 SOURCES = adc.cpp \
 		button.cpp \
-		pages.cpp \
+		page_config.cpp \
+		page_main.cpp \
+		page_manual.cpp \
+		page_measurement.cpp \
+		page_splash.cpp \
 		display_wrapper.cpp \
 		main.cpp \
 		measurementTimer.cpp \

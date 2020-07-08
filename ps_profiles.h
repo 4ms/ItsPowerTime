@@ -8,16 +8,19 @@ struct psProfile {
 
 struct psProfiles {
 	static inline constexpr psProfile TestPS = {
-		300, 600, 500
+		300, 200, 100
 	};
 	static constexpr psProfile RowPower25 = {
-		1000, 1250, 1000
+		1000, 500, 1000
 	};
 	static constexpr psProfile RowPower35 = {
 		1500, 1500, 1250
 	};
 	static constexpr psProfile RowPower45 = {
 		2000, 1500, 1250
+	};
+	static constexpr psProfile ManualMode = {
+		0 , 0, 0
 	};
 };
 

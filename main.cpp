@@ -4,128 +4,146 @@
 #include "pages.h"
 #include "button.h"
 #include "adc.h"
-#include "measurementTimer.h"
 #include "current_setter.h"
+#include "ps_profiles.h"
 
 void show_debug_xytouch();
 
-enum AppStates {
-	INITIALIZING,
-	MAIN_SCREEN,
-	CONFIG,
-	MEASURING,
-	SHOW_RESULTS,
-};
+class ItsPowerTimeApp {
+public:
+	enum AppStates {
+		INITIALIZING,
+		MAIN_SCREEN,
+		CONFIG,
+		MEASURING,
+		MANUAL_MEASURING,
+		SHOW_RESULTS,
+	};
+	AppStates app_state;
 
-AppStates app_state;
-MeasurementTimer timer;
-CurrentSetter currentSetter;
+	psProfile active_ps;
+	CurrentSetter currentSetter {active_ps};
 
-Button MainPage::start_but;
-Button MainPage::config_but;
-Button MeasuringPage::stop_but;
-Button ConfigPage::TestPS_but;
-Button ConfigPage::RP25_but;
-Button ConfigPage::RP35_but;
-Button ConfigPage::RP45_but;
+	MainPage mainPage;
+	ConfigPage configPage;
+	MeasuringPage measuringPage {active_ps};
+	ManualMeasuringPage manualPage {active_ps};
+	TSErrorPage tsErrorPage;
+	SplashPage splashPage;
 
-MainPage mainPage;
-ConfigPage configPage;
-MeasuringPage measureingPage;
-
-static void app_transition_to(AppStates new_state)
-{
-	switch (new_state) {
-	case (INITIALIZING): {
-		SplashPage::display();
-		wait(2);
-
-		uint32_t display_size_x = get_display_size_x();
-		uint32_t display_size_y = get_display_size_y();
-
-		bool success = ts_init(display_size_x, display_size_y);
-
-		if (!success) {
-			TSErrorPage::display();
-			while(true) {;}
-		}
+	ItsPowerTimeApp() {
 		//Default Power Supply
-		currentSetter.set_profile(psProfiles::TestPS);
-		break;
+		active_ps = psProfiles::TestPS;
+		transition_to(INITIALIZING);
 	}
 
-	case (MAIN_SCREEN):
-		currentSetter.stop();
-		MainPage::display();
-		break;
+	void transition_to(AppStates new_state)
+	{
+		switch (new_state) {
+		case (INITIALIZING): {
+			splashPage.display();
+			wait(2);
 
-	case (CONFIG):
-		ConfigPage::display();
-		break;
+			uint32_t display_size_x = get_display_size_x();
+			uint32_t display_size_y = get_display_size_y();
 
-	case (MEASURING): {
-		timer.reset();
-		timer.start();
-		currentSetter.start();
-		auto ps = currentSetter.get_profile();
-		MeasuringPage::display(ps);
-		break;
+			bool success = ts_init(display_size_x, display_size_y);
+
+			if (!success) {
+				tsErrorPage.display();
+				while(true) {;}
+			}
+			break;
+		}
+
+		case (MAIN_SCREEN):
+			currentSetter.stop();
+			mainPage.display();
+			break;
+
+		case (CONFIG):
+			configPage.display();
+			break;
+
+		case (MEASURING): {
+			measuringPage.timer.reset();
+			measuringPage.timer.start();
+			currentSetter.start();
+			measuringPage.display();
+			break;
+		}
+
+		case (MANUAL_MEASURING): {
+			active_ps = psProfiles::ManualMode;
+			manualPage.timer.reset();
+			manualPage.timer.start();
+			currentSetter.start();
+			manualPage.display();
+			break;
+		}
+
+		case (SHOW_RESULTS):
+			break;
+		default:
+			break;
+		}
+		app_state = new_state;
 	}
 
-	case (SHOW_RESULTS):
-		break;
-	default:
-		break;
-	}
-	app_state = new_state;
-}
-
-int main()
-{
-	app_transition_to(INITIALIZING);
-
-	while (1) {
+	void loop() {
 		switch (app_state) {
 		case (INITIALIZING):
-			app_transition_to(MAIN_SCREEN);
+			transition_to(MAIN_SCREEN);
 			break;
 
 		case (MAIN_SCREEN): {
-			MainPage::update();
-			if (MainPage::start_but.is_just_released()) {
-				app_transition_to(MEASURING);
+			mainPage.update();
+			if (mainPage.start_but.is_just_released()) {
+				transition_to(MEASURING);
 			}
-			if (MainPage::config_but.is_just_released()) {
-				app_transition_to(CONFIG);
+			if (mainPage.config_but.is_just_released()) {
+				transition_to(CONFIG);
+			}
+			if (mainPage.manual_but.is_just_released()) {
+				transition_to(MANUAL_MEASURING);
 			}
 			break;
 		}
 
 		case (CONFIG): {
-			ConfigPage::update();
-			if (ConfigPage::TestPS_but.is_just_released()) {
-				currentSetter.set_profile(psProfiles::TestPS);
-				app_transition_to(MAIN_SCREEN);
+			configPage.update();
+			if (configPage.TestPS_but.is_just_released()) {
+				active_ps = psProfiles::TestPS;
+				transition_to(MAIN_SCREEN);
 			}
-			if (ConfigPage::RP25_but.is_just_released()) {
-				currentSetter.set_profile(psProfiles::RowPower25);
-				app_transition_to(MAIN_SCREEN);
+			if (configPage.RP25_but.is_just_released()) {
+				active_ps = psProfiles::RowPower25;
+				transition_to(MAIN_SCREEN);
 			}
-			if (ConfigPage::RP35_but.is_just_released()) {
-				currentSetter.set_profile(psProfiles::RowPower35);
-				app_transition_to(MAIN_SCREEN);
+			if (configPage.RP35_but.is_just_released()) {
+				active_ps = psProfiles::RowPower35;
+				transition_to(MAIN_SCREEN);
 			}
-			if (ConfigPage::RP45_but.is_just_released()) {
-				currentSetter.set_profile(psProfiles::RowPower45);
-				app_transition_to(MAIN_SCREEN);
+			if (configPage.RP45_but.is_just_released()) {
+				active_ps = psProfiles::RowPower45;
+				transition_to(MAIN_SCREEN);
 			}
 			break;
 		}
 
 		case (MEASURING): {
-			MeasuringPage::update(timer);
-			if (MeasuringPage::stop_but.is_just_released()) {
-				app_transition_to(MAIN_SCREEN);
+			measuringPage.update();
+			if (measuringPage.stop_but.is_just_released()) {
+				transition_to(MAIN_SCREEN);
+			}
+			break;
+		}
+
+		case (MANUAL_MEASURING): {
+			manualPage.update();
+			currentSetter.start();
+			if (manualPage.stop_but.is_just_released()) {
+				transition_to(MAIN_SCREEN);
 			}
 			break;
 		}
@@ -134,8 +152,23 @@ int main()
 			break;
 		}
 	}
+};
+
+int main()
+{
+	ItsPowerTimeApp app;
+
+	while (1) {
+		app.loop();
+	}
 }
 
+
+void display_debug_info(const char *debug_text) {
+	set_font_size(FONT_SIZE_SMALL);
+	set_fg_color(LCD_COLOR_BLACK);
+	display_string(0, LINE(12), debug_text, LEFT_MODE);
+}
 
 void show_debug_xytouch() {
 	uint16_t x, y;
