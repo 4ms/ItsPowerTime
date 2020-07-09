@@ -3,6 +3,7 @@
 #include "LCD_DISCO_F429ZI.h"
 
 enum FontSizes {
+	FONT_SIZE_VERY_SMALL,
     FONT_SIZE_SMALL,
     FONT_SIZE_MED,
     FONT_SIZE_BIG,

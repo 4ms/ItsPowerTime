@@ -16,9 +16,10 @@ void set_font_size(FontSizes size) {
 		BSP_LCD_SetFont(&Font20);
 	else if (size==FONT_SIZE_BIG)
 		BSP_LCD_SetFont(&Font24);
+	else if (size==FONT_SIZE_VERY_SMALL)
+		BSP_LCD_SetFont(&Font12);
 }
 
-//Todo: get the line height directly, like Font24.height
 uint16_t get_font_line_height(FontSizes size) {
 	if (size==FONT_SIZE_SMALL)
 		return Font16.Height;
@@ -26,6 +27,8 @@ uint16_t get_font_line_height(FontSizes size) {
 		return Font20.Height;
 	else if (size==FONT_SIZE_BIG)
 		return Font24.Height;
+	else if (size==FONT_SIZE_VERY_SMALL)
+		return Font12.Height;
 	else
 		return Font16.Height; //default
 }

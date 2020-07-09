@@ -3,7 +3,6 @@
 #include "display_wrapper.h"
 #include "pages.h"
 #include "button.h"
-#include "adc.h"
 #include "current_setter.h"
 #include "ps_profiles.h"
 

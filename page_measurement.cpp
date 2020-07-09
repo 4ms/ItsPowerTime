@@ -27,8 +27,18 @@ void MeasuringPage::display() {
 	display_string(0, LINE(19), "Set -12 mA: ", LEFT_MODE);
 	display_ps_profile();
 
+	set_fg_color(LCD_COLOR_GRAY);
+	display_string(0, LINE(5), "+12V:", LEFT_MODE);
+	display_string(0, LINE(6), "+5V:", LEFT_MODE);
+	display_string(0, LINE(7), "-12V:", LEFT_MODE);
+	display_string(140, LINE(5), "mA:", LEFT_MODE);
+	display_string(140, LINE(6), "mA:", LEFT_MODE);
+	display_string(140, LINE(7), "mA:", LEFT_MODE);
+	display_measurements();
+
 	stop_but.draw();
 }
+
 
 void MeasuringPage::display_ps_profile() {
 	char ma_string[6];
@@ -43,12 +53,36 @@ void MeasuringPage::display_ps_profile() {
 		display_string(1, LINE(19), ma_string, RIGHT_MODE);
 }
 
+void MeasuringPage::display_measurements() {
+	char reading_string[6];
+	set_bg_color(LCD_COLOR_YELLOW);
+	set_fg_color(LCD_COLOR_BLUE);
+	set_font_size(FONT_SIZE_SMALL);
+
+	if ( sprintf(reading_string, "%2.1f", measurer.read_12V_mV()) >= 0 )
+		display_string(80, LINE(5), reading_string, LEFT_MODE);
+	if ( sprintf(reading_string, "%2.1f", measurer.read_5V_mV()) >= 0 )
+		display_string(80, LINE(6), reading_string, LEFT_MODE);
+	if ( sprintf(reading_string, "%2.1f", measurer.read_N12V_mV()) >= 0 )
+		display_string(80, LINE(7), reading_string, LEFT_MODE);
+
+	if ( sprintf(reading_string, "%4d", measurer.read_12V_mA()) >= 0 )
+		display_string(0, LINE(5), reading_string, RIGHT_MODE);
+	if ( sprintf(reading_string, "%4d", measurer.read_5V_mA()) >= 0 )
+		display_string(0, LINE(6), reading_string, RIGHT_MODE);
+	if ( sprintf(reading_string, "%4d", measurer.read_N12V_mA()) >= 0 )
+		display_string(0, LINE(7), reading_string, RIGHT_MODE);
+}
+
+
 void MeasuringPage::update() {
 	stop_but.update();
 	if (timer.read_ms() > timer.last_time_read) {
 		timer.last_time_read = timer.read_ms();
 		display_time((float)timer.last_time_read/1000.0f);
 	}
+	if (timer.read_ms() % 50 == 0)
+		display_measurements();
 }
 
 void MeasuringPage::display_time(float tm) {

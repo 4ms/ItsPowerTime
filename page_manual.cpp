@@ -4,58 +4,53 @@
 ManualMeasuringPage::ManualMeasuringPage(psProfile &psRef)
 : MeasuringPage(psRef)
 {
-	const uint32_t top = 80;
-	const uint32_t ysp = 70;
-	const uint32_t wid = 60;
-	const uint32_t ht = 40;
-	const uint32_t xsp = 80;
-	const uint32_t xmargin = 5;
+	const uint32_t wid = 25;
+	const uint32_t ht = 13;
 
-	p12_up.rect = {xmargin, top, wid, ht, 0};
+	const uint32_t top = 272;
+	const uint32_t left = 120;
+	const uint32_t ysp = 16;
+	const uint32_t xsp = 40;
+
+	p12_up.rect = {left + xsp, top, wid, ht, 0};
 	p12_up.text = "+";
-	p12_up.fontsize = FONT_SIZE_SMALL;
+	p12_up.fontsize = FONT_SIZE_VERY_SMALL;
 	p12_up.text_color = LCD_COLOR_BLACK;
 	p12_up.bg_color = LCD_COLOR_RED;
 
-	p12_down.rect = {xmargin, top+ysp, wid, ht, 0};
+	p12_down.rect = {left, top, wid, ht, 0};
 	p12_down.text = "-";
-	p12_down.fontsize = FONT_SIZE_SMALL;
+	p12_down.fontsize = FONT_SIZE_VERY_SMALL;
 	p12_down.text_color = LCD_COLOR_BLACK;
 	p12_down.bg_color = LCD_COLOR_GREEN;
 
-	p5_up.rect = {xmargin + xsp, top, wid, ht, 0};
+	p5_up.rect = {left + xsp, top + ysp, wid, ht, 0};
 	p5_up.text = "+";
-	p5_up.fontsize = FONT_SIZE_SMALL;
+	p5_up.fontsize = FONT_SIZE_VERY_SMALL;
 	p5_up.text_color = LCD_COLOR_BLACK;
 	p5_up.bg_color = LCD_COLOR_RED;
 
-	p5_down.rect = {xmargin + xsp, top+ysp, wid, ht, 0};
+	p5_down.rect = {left, top + ysp, wid, ht, 0};
 	p5_down.text = "-";
-	p5_down.fontsize = FONT_SIZE_SMALL;
+	p5_down.fontsize = FONT_SIZE_VERY_SMALL;
 	p5_down.text_color = LCD_COLOR_BLACK;
 	p5_down.bg_color = LCD_COLOR_GREEN;
 
-	n12_up.rect = {xmargin + xsp*2, top, wid, ht, 0};
+	n12_up.rect = {left + xsp, top + ysp*2, wid, ht, 0};
 	n12_up.text = "+";
-	n12_up.fontsize = FONT_SIZE_SMALL;
+	n12_up.fontsize = FONT_SIZE_VERY_SMALL;
 	n12_up.text_color = LCD_COLOR_BLACK;
 	n12_up.bg_color = LCD_COLOR_RED;
 
-	n12_down.rect = {xmargin + xsp*2, top+ysp, wid, ht, 0};
+	n12_down.rect = {left, top + ysp*2, wid, ht, 0};
 	n12_down.text = "-";
-	n12_down.fontsize = FONT_SIZE_SMALL;
+	n12_down.fontsize = FONT_SIZE_VERY_SMALL;
 	n12_down.text_color = LCD_COLOR_BLACK;
 	n12_down.bg_color = LCD_COLOR_GREEN;
 }
 
 void ManualMeasuringPage::display() {
 	MeasuringPage::display();
-	set_bg_color(LCD_COLOR_YELLOW);
-	set_fg_color(LCD_COLOR_BLACK);
-	set_font_size(FONT_SIZE_MED);
-	display_string(5, 120, "+12V", LEFT_MODE);
-	display_string(85, 120, "+5V", LEFT_MODE);
-	display_string(165, 120, "-12V", LEFT_MODE);
 	p12_up.draw();
 	p12_down.draw();
 	p5_up.draw();
