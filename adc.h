@@ -1,5 +1,5 @@
 #pragma once
-#include "mbed.h"
+#include <mbed.h>
 #include <stdint.h>
 
 class CurrentMeasurer {
@@ -15,11 +15,11 @@ public:
 private:
 	AnalogIn adc12V {PA_5}; //CH5
 	AnalogIn adc5V {PC_3}; //CH1 (moved from PA1 in p2 board)
-	AnalogIn adcN12V {PA_7}; //CH7 
+	AnalogIn adcN12V {PA_7}; //CH7
 
-	AnalogIn adc12A {PC_2}; //CH12 also is LCD CS (moved from PC4 on p2 board)
-	AnalogIn adc5A {PF_8};  //ADC3_CH6 also is MEMS Accel MISO (moved from PA2 on p2 board)
-	AnalogIn adcN12A {PF_6}; //CH4 
+	AnalogIn adc12A {PF_8}; //ADC3_CH6 also is MEMS Accel MISO (moved from PA2 on p2 board)
+	AnalogIn adc5A {PC_2};  //CH12 also is LCD CS (moved from PC4 on p2 board)
+	AnalogIn adcN12A {PF_6}; //CH4
 };
 
 //PC0: MEMS CS, won't boot
