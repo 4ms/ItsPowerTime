@@ -5,11 +5,11 @@ ManualMeasuringPage::ManualMeasuringPage(psProfile &psRef)
 : MeasuringPage(psRef)
 {
 	const uint32_t wid = 25;
-	const uint32_t ht = 13;
+	const uint32_t ht = 20;
 
-	const uint32_t top = 272;
+	const uint32_t top = 250;
 	const uint32_t left = 120;
-	const uint32_t ysp = 16;
+	const uint32_t ysp = 25;
 	const uint32_t xsp = 40;
 
 	p12_up.rect = {left + xsp, top, wid, ht, 0};

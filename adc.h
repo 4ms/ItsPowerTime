@@ -1,5 +1,5 @@
 #pragma once
-#include "mbed.h"
+#include <mbed.h>
 #include <stdint.h>
 
 class CurrentMeasurer {
