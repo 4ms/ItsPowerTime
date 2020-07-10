@@ -60,6 +60,7 @@ SOURCES = adc.cpp \
 		measurementTimer.cpp \
 		ts.cpp \
 		current_setter.cpp \
+		audio_out.cpp \
 
 OBJECTS += $(addprefix $(OBJDIR)/, $(addsuffix .o, $(basename $(SOURCES))))
 

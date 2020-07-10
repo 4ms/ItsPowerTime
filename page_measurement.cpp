@@ -37,6 +37,20 @@ void MeasuringPage::display() {
 	display_measurements();
 
 	stop_but.draw();
+
+	// uint8_t t[] = {
+	// 	250, 200, 150, 100, 50, 10, 60, 110, 210, 250,
+	// 	250, 200, 150, 100, 50, 10, 60, 110, 210, 250,
+	// 	250, 200, 150, 100, 50, 10, 60, 110, 210, 250,
+	// 	250, 200, 150, 100, 50, 10, 60, 110, 210, 250,
+	// 	250, 200, 150, 100, 50, 10, 60, 110, 210, 250,
+	// 	250, 200, 150, 100, 50, 10, 60, 110, 210, 250,
+	// 	250, 200, 150, 100, 50, 10, 60, 110, 210, 250,
+	// 	250, 200, 150, 100, 50, 10, 60, 110, 210, 250,
+	// 	250, 200, 150, 100, 50, 10, 60, 110, 210, 250,
+	// 	250, 200, 150, 100, 50, 10, 60, 110, 210, 250,
+	// };
+	// audioout.play_wav(t, 100, 10000);
 }
 
 
@@ -83,6 +97,19 @@ void MeasuringPage::update() {
 	}
 	if (timer.read_ms() % 50 == 0)
 		display_measurements();
+
+
+	play_startup_sound();
+}
+
+void MeasuringPage::play_startup_sound() {
+	if (!audioout.is_playing) {
+		if (timer.read_ms() < 1000)
+			audioout.start_buzzer(100);
+	} else {
+		if (timer.read_ms() >= 1000)
+			audioout.stop();
+	}
 }
 
 void MeasuringPage::display_time(float tm) {
