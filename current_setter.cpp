@@ -9,9 +9,9 @@ CurrentSetter::CurrentSetter(psProfile &psRef)
 	setN12A.period_ms(1);
 	stop();
 
-	set_max_12V_mA(3300);
-	set_max_5V_mA(3300);
-	set_max_N12V_mA(3300);
+	set_max_12V_mA(2752);
+	set_max_5V_mA(2838);
+	set_max_N12V_mA(2838);
 }
 
 void CurrentSetter::update_outputs() {

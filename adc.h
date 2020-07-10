@@ -17,8 +17,8 @@ private:
 	AnalogIn adc5V {PC_3}; //CH1 (moved from PA1 in p2 board)
 	AnalogIn adcN12V {PA_7}; //CH7
 
-	AnalogIn adc12A {PC_2}; //CH12 also is LCD CS (moved from PC4 on p2 board)
-	AnalogIn adc5A {PF_8};  //ADC3_CH6 also is MEMS Accel MISO (moved from PA2 on p2 board)
+	AnalogIn adc12A {PF_8}; //CH12 also is LCD CS (moved from PC4 on p2 board)
+	AnalogIn adc5A {PC_2};  //ADC3_CH6 also is MEMS Accel MISO (moved from PA2 on p2 board)
 	AnalogIn adcN12A {PF_6}; //CH4
 };
 

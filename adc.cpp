@@ -13,15 +13,15 @@ float CurrentMeasurer::read_5V_mV() {
 }
 
 uint16_t CurrentMeasurer::read_12V_mA() {
-	return adc12A.read() * 3300;
+	return adc12A.read() * 2752;
 }
 
 uint16_t CurrentMeasurer::read_N12V_mA() {
-	return adcN12A.read() * 3300;
+	return adcN12A.read() * 2838;
 }
 
 uint16_t CurrentMeasurer::read_5V_mA() {
-	return adc5A.read() * 3300;
+	return adc5A.read() * 2838;
 }
 
 
