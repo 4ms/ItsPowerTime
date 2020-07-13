@@ -5,7 +5,7 @@
 #include "button.h"
 #include "measurementTimer.h"
 #include "ps_profiles.h"
-#include "adc.h"
+#include "measurer.h"
 #include "audio_out.h"
 
 class MeasuringPage : public Page {
@@ -18,14 +18,14 @@ protected:
 	void display_ps_profile();
 
 private:
-	void play_startup_sound();
+	void handle_startup_sound();
 	void display_measurements();
 	void display_time(float tm);
 
 public:
 	Button stop_but;
 	MeasurementTimer timer;
-	CurrentMeasurer measurer;
+	MeasurementReader measurer;
 
 protected:
 	psProfile &ps;

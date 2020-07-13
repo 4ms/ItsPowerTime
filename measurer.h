@@ -2,7 +2,8 @@
 #include <mbed.h>
 #include <stdint.h>
 
-class CurrentMeasurer {
+class MeasurementReader {
+const static inline auto channels = {PA_5, PC_3, PA_7, PF_8, PC_2, PF_6};
 public:
 	float read_12V_mV();
 	float read_N12V_mV();
@@ -11,6 +12,9 @@ public:
 	uint16_t read_12V_mA();
 	uint16_t read_N12V_mA();
 	uint16_t read_5V_mA();
+
+	void reset_all_averages();
+	void update_all_averages();
 
 private:
 	AnalogIn adc12V {PA_5}; //CH5

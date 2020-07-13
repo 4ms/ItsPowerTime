@@ -16,7 +16,6 @@ CurrentSetter::CurrentSetter(psProfile &psRef)
 	offset_.mA_12V = 27;
 	offset_.mA_N12V = 15;
 	offset_.mA_5V = 23;
-
 }
 
 float CurrentSetter::adjust_output(uint16_t unadjusted, uint16_t offset, uint16_t max) {

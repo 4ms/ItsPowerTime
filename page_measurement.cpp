@@ -69,7 +69,7 @@ void MeasuringPage::display_ps_profile() {
 }
 
 void MeasuringPage::display_measurements() {
-	char reading_string[6];
+	char reading_string[8];
 	set_bg_color(LCD_COLOR_YELLOW);
 	set_fg_color(LCD_COLOR_BLUE);
 	set_font_size(FONT_SIZE_SMALL);
@@ -95,14 +95,19 @@ void MeasuringPage::update() {
 	if (timer.read_ms() > timer.last_time_read) {
 		timer.last_time_read = timer.read_ms();
 		display_time((float)timer.last_time_read/1000.0f);
-		if ((timer.last_time_read % 100) == 0)
+
+		if ((timer.last_time_read % 100) == 0) {
 			display_measurements();
+			measurer.reset_all_averages();
+		} else {
+			measurer.update_all_averages();
+		}
 	}
 
-	play_startup_sound();
+	handle_startup_sound();
 }
 
-void MeasuringPage::play_startup_sound() {
+void MeasuringPage::handle_startup_sound() {
 	if (!audioout.is_playing) {
 		if (timer.read_ms() < 1000)
 			audioout.start_buzzer(100);
