@@ -4,16 +4,16 @@
 CurrentSetter::CurrentSetter(psProfile &psRef)
 : ps{psRef}
 {
+	stop();
 	set12A.period_ms(1);
 	set5A.period_ms(1);
 	setN12A.period_ms(1);
-	stop();
 
-	set_max_12V_mA(2776);
+	set_max_12V_mA(2740);//2725);//2776);
 	set_max_5V_mA(2811);
 	set_max_N12V_mA(2809);
 
-	offset_.mA_12V = 27;
+	offset_.mA_12V = 30;
 	offset_.mA_N12V = 15;
 	offset_.mA_5V = 23;
 }

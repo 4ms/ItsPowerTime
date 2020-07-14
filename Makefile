@@ -61,6 +61,7 @@ SOURCES = measurer.cpp \
 		ts.cpp \
 		current_setter.cpp \
 		audio_out.cpp \
+		filters.cpp \
 
 OBJECTS += $(addprefix $(OBJDIR)/, $(addsuffix .o, $(basename $(SOURCES))))
 

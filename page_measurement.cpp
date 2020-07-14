@@ -74,18 +74,18 @@ void MeasuringPage::display_measurements() {
 	set_fg_color(LCD_COLOR_BLUE);
 	set_font_size(FONT_SIZE_SMALL);
 
-	if ( sprintf(reading_string, "%2.2f", measurer.read_12V_mV()) >= 0 )
+	if ( sprintf(reading_string, "%2.2f", measurer.get_average(AdcChannels::voltage12V)) >= 0 )
 		display_string(55, LINE(5), reading_string, LEFT_MODE);
-	if ( sprintf(reading_string, "%2.2f", measurer.read_5V_mV()) >= 0 )
+	if ( sprintf(reading_string, "%2.2f", measurer.get_average(AdcChannels::voltage5V)) >= 0 )
 		display_string(65, LINE(6), reading_string, LEFT_MODE);
-	if ( sprintf(reading_string, "%2.2f", measurer.read_N12V_mV()) >= 0 )
+	if ( sprintf(reading_string, "%2.2f", measurer.get_average(AdcChannels::voltageN12V)) >= 0 )
 		display_string(55, LINE(7), reading_string, LEFT_MODE);
 
-	if ( sprintf(reading_string, "%4d", measurer.read_12V_mA()) >= 0 )
+	if ( sprintf(reading_string, "%4d", (uint16_t)measurer.get_average(AdcChannels::current12V)) >= 0 )
 		display_string(215, LINE(5), reading_string, RIGHT_MODE);
-	if ( sprintf(reading_string, "%4d", measurer.read_5V_mA()) >= 0 )
+	if ( sprintf(reading_string, "%4d", (uint16_t)measurer.get_average(AdcChannels::current5V)) >= 0 )
 		display_string(215, LINE(6), reading_string, RIGHT_MODE);
-	if ( sprintf(reading_string, "%4d", measurer.read_N12V_mA()) >= 0 )
+	if ( sprintf(reading_string, "%4d", (uint16_t)measurer.get_average(AdcChannels::currentN12V)) >= 0 )
 		display_string(215, LINE(7), reading_string, RIGHT_MODE);
 }
 
@@ -96,7 +96,7 @@ void MeasuringPage::update() {
 		timer.last_time_read = timer.read_ms();
 		display_time((float)timer.last_time_read/1000.0f);
 
-		if ((timer.last_time_read % 100) == 0) {
+		if ((timer.last_time_read % 50) == 0) {
 			display_measurements();
 			measurer.reset_all_averages();
 		} else {

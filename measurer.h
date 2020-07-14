@@ -1,29 +1,44 @@
 #pragma once
 #include <mbed.h>
 #include <stdint.h>
+#include "filters.hh"
+
+enum AdcChannels : uint8_t {
+	voltage12V, voltage5V, voltageN12V,
+	current12V, current5V, currentN12V,
+	numChannels
+};
 
 class MeasurementReader {
-const static inline auto channels = {PA_5, PC_3, PA_7, PF_8, PC_2, PF_6};
+	const static inline PinName channelPins[6]= {
+		PA_5, PC_3, PA_7,
+		PF_8, PC_2, PF_6
+	};
 public:
-	float read_12V_mV();
-	float read_N12V_mV();
-	float read_5V_mV();
-
-	uint16_t read_12V_mA();
-	uint16_t read_N12V_mA();
-	uint16_t read_5V_mA();
-
+	float get_average(uint8_t chan);
 	void reset_all_averages();
 	void update_all_averages();
 
 private:
-	AnalogIn adc12V {PA_5}; //CH5
-	AnalogIn adc5V {PC_3}; //CH1 (moved from PA1 in p2 board)
-	AnalogIn adcN12V {PA_7}; //CH7
+	float raw_reading(uint8_t chan);
 
-	AnalogIn adc12A {PF_8}; //CH12 also is LCD CS (moved from PC4 on p2 board)
-	AnalogIn adc5A {PC_2};  //ADC3_CH6 also is MEMS Accel MISO (moved from PA2 on p2 board)
-	AnalogIn adcN12A {PF_6}; //CH4
+	const static inline float scaling[6] {
+		18.137f, 17.217f, 19.97f,
+		2745.0f, 2811.0f, 2852.0f
+	};
+	const static inline float offset[6] {
+		0.0f, 0.f, 0.f,
+		16.f, 9.f, 0.f
+	};
+	AnalogIn adcs[6] {
+		channelPins[AdcChannels::voltage12V],
+		channelPins[AdcChannels::voltage5V],
+		channelPins[AdcChannels::voltageN12V],
+		channelPins[AdcChannels::current12V],
+		channelPins[AdcChannels::current5V],
+		channelPins[AdcChannels::currentN12V]
+	};
+	SimpleAverage averages[6];
 };
 
 //PC0: MEMS CS, won't boot
