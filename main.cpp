@@ -31,6 +31,7 @@ public:
 	SplashPage splashPage;
 
 	ItsPowerTimeApp() {
+		currentSetter.stop();
 		//Default Power Supply
 		active_ps = psProfiles::TestPS;
 		transition_to(INITIALIZING);
@@ -40,8 +41,6 @@ public:
 	{
 		switch (new_state) {
 		case (INITIALIZING): {
-			splashPage.display();
-			wait(2);
 
 			uint32_t display_size_x = get_display_size_x();
 			uint32_t display_size_y = get_display_size_y();
@@ -52,6 +51,9 @@ public:
 				tsErrorPage.display();
 				while(true) {;}
 			}
+
+			splashPage.display();
+			wait_ms(200);
 			break;
 		}
 
