@@ -22,8 +22,7 @@ private:
 	PwmOut set12A {PC_8}; //is PB_6 on p2 board: interferes with screen
 	psProfile &ps;
 	psProfile max_;
-	psProfile offset_; //base current without any PWM applied
 
-	float adjust_output(uint16_t unadjusted, uint16_t offset, uint16_t max);
+	float adjust_output(uint16_t unadjusted, int16_t offset, uint16_t max);
 };
 

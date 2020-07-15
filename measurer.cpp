@@ -15,7 +15,7 @@ void MeasurementReader::update_all_averages() {
 }
 
 float MeasurementReader::raw_reading(uint8_t chan) {
-	return (adcs[chan].read() * scaling[chan]) + offset[chan];
+	return (adcs[chan].read() * CalibrationDefs::adc_scaling[chan]) + CalibrationDefs::adc_offset[chan];
 }
 
 float MeasurementReader::get_average(uint8_t chan) {

@@ -2,18 +2,9 @@
 #include <mbed.h>
 #include <stdint.h>
 #include "filters.hh"
-
-enum AdcChannels : uint8_t {
-	voltage12V, voltage5V, voltageN12V,
-	current12V, current5V, currentN12V,
-	numChannels
-};
+#include "calibration_defs.h"
 
 class MeasurementReader {
-	const static inline PinName channelPins[6]= {
-		PA_5, PC_3, PA_7,
-		PF_8, PC_2, PF_6
-	};
 public:
 	float get_average(uint8_t chan);
 	void reset_all_averages();
@@ -22,21 +13,14 @@ public:
 private:
 	float raw_reading(uint8_t chan);
 
-	const static inline float scaling[6] {
-		18.137f, 17.217f, 19.97f,
-		2745.0f, 2811.0f, 2852.0f
-	};
-	const static inline float offset[6] {
-		0.0f, 0.f, 0.f,
-		16.f, 9.f, 0.f
-	};
+
 	AnalogIn adcs[6] {
-		channelPins[AdcChannels::voltage12V],
-		channelPins[AdcChannels::voltage5V],
-		channelPins[AdcChannels::voltageN12V],
-		channelPins[AdcChannels::current12V],
-		channelPins[AdcChannels::current5V],
-		channelPins[AdcChannels::currentN12V]
+		CalibrationDefs::channelPins[AdcChannels::voltage12V],
+		CalibrationDefs::channelPins[AdcChannels::voltage5V],
+		CalibrationDefs::channelPins[AdcChannels::voltageN12V],
+		CalibrationDefs::channelPins[AdcChannels::current12V],
+		CalibrationDefs::channelPins[AdcChannels::current5V],
+		CalibrationDefs::channelPins[AdcChannels::currentN12V]
 	};
 	SimpleAverage averages[6];
 };
