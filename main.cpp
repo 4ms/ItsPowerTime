@@ -33,7 +33,7 @@ public:
 	ItsPowerTimeApp() {
 		currentSetter.stop();
 		//Default Power Supply
-		active_ps = psProfiles::TestPS;
+		active_ps = psProfileArray[0];
 		transition_to(INITIALIZING);
 	}
 
@@ -49,7 +49,8 @@ public:
 
 			if (!success) {
 				tsErrorPage.display();
-				while(true) {;}
+				wait_ms(200);
+				//while(true) {;}
 			}
 
 			splashPage.display();
@@ -113,21 +114,11 @@ public:
 
 		case (CONFIG): {
 			configPage.update();
-			if (configPage.TestPS_but.is_just_released()) {
-				active_ps = psProfiles::TestPS;
-				transition_to(MAIN_SCREEN);
-			}
-			if (configPage.RP25_but.is_just_released()) {
-				active_ps = psProfiles::RowPower25;
-				transition_to(MAIN_SCREEN);
-			}
-			if (configPage.RP35_but.is_just_released()) {
-				active_ps = psProfiles::RowPower35;
-				transition_to(MAIN_SCREEN);
-			}
-			if (configPage.RP45_but.is_just_released()) {
-				active_ps = psProfiles::RowPower45;
-				transition_to(MAIN_SCREEN);
+			for (auto &but : configPage.ps_buts) {
+				if (but.is_just_released()) {
+					active_ps = psProfileArray[but.ps_index];
+					transition_to(MAIN_SCREEN);
+				}
 			}
 			break;
 		}
