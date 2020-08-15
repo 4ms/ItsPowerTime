@@ -1,6 +1,19 @@
 #pragma once
 
+enum class PSProfileID {
+	Pod20_26_32,
+	PodX_60,
+	RP25,
+	RP35,
+	RP45,
+	Manual,
+	Old_Pod20_26_32,
+	Old_Pod_Dbl_Nrw,
+	Old_Pod_60_2PCBS
+};
+
 struct psProfile {
+	PSProfileID psProfileID;
 	uint16_t mA_12V;
 	uint16_t mA_5V;
 	uint16_t mA_N12V;
@@ -12,44 +25,14 @@ struct psProfile {
 constexpr uint8_t kNumProfiles = 9;
 //const std::array<psProfile, kNumProfiles> psProfileArray = {
 const psProfile psProfileArray[kNumProfiles] = {
-	{ 700, 1000, 280, 5*60, "Pod 20/26/32" },
-	{ 1400, 1000, 670, 5*60, "Pod X/60" },
-	{ 1000, 500, 1000, 5*60, "RP 25" },
-	{ 1500, 1500, 1250, 5*60, "RP 35" },
-	{ 2000, 1500, 1250, 7*60, "RP 45" },
-	{ 0 , 0, 0, 30*60, "Manual" },
-	{ 700, 200, 280, 5*60, "Old Pod" },
-	{ 1400, 500, 670, 5*60, "Old PodDbl" },
-	{ 700, 200, 280, 5*60, "Old Pod60" },
-};
-
-struct psProfiles {
-	static constexpr psProfile PodPower = {
-		700, 1000, 280, 5*60, "Pod 20/26/32"
-	};
-	static constexpr psProfile PodPowerDouble = {
-		1400, 1000, 670, 5*60, "Pod X/60"
-	};
-	static constexpr psProfile RowPower25 = {
-		1000, 500, 1000, 5*60, "RP 25"
-	};
-	static constexpr psProfile RowPower35 = {
-		1500, 1500, 1250, 5*60, "RP 35"
-	};
-	static constexpr psProfile RowPower45 = {
-		2000, 1500, 1250, 7*60, "RP 45"
-	};
-	static constexpr psProfile ManualMode = {
-		0 , 0, 0, 30*60, "Manual Mode"
-	};
-	static constexpr psProfile PodPowerV1 = {
-		700, 200, 280, 5*60, "Old Pod"
-	};
-	static constexpr psProfile PodPowerDoubleV1 = {
-		1400, 500, 670, 5*60, "Old Pod Dbl/Nar"
-	};
-	static constexpr psProfile Pod60V1 = {
-		700, 200, 280, 5*60, "Old Pod60 x2"
-	};
+	{ PSProfileID::Pod20_26_32, 700, 1000, 280, 5*60, "Pod 20-32" },
+	{ PSProfileID::PodX_60,        	1400, 1000, 670, 5*60, "PodX/60" },
+	{ PSProfileID::RP25,           	1000, 500, 1000, 5*60, "RP 25" },
+	{ PSProfileID::RP35,           	1500, 1500, 1250, 5*60, "RP 35" },
+	{ PSProfileID::RP45,           	2000, 1500, 1250, 7*60, "RP 45" },
+	{ PSProfileID::Manual,         	0 , 0, 0, 30*60, "Manual" },
+	{ PSProfileID::Old_Pod20_26_32,	700, 200, 280, 5*60, "Old Pod 20-32" },
+	{ PSProfileID::Old_Pod_Dbl_Nrw,	1400, 500, 670, 5*60, "Old PodDbl/Nar" },
+	{ PSProfileID::Old_Pod_60_2PCBS,	700, 200, 280, 5*60, "Old Pod60 two PCB" },
 };
 

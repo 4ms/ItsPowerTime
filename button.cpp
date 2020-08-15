@@ -50,7 +50,7 @@ void Button::update() {
 		_pressed = false;
 		if (!_drawn_normal) {
 			draw();
-			_drawn_normactl = true;
+			_drawn_normal = true;
 		}
 	}
 	else {

@@ -27,6 +27,9 @@ void MeasuringPage::display() {
 	display_string(0, 304 , "Set -12 mA: ", LEFT_MODE);
 	display_ps_profile();
 
+	set_font_size(FONT_SIZE_MED);
+	display_string(0, 229, ps.name, CENTER_MODE);
+
 	set_font_size(FONT_SIZE_SMALL);
 	set_fg_color(LCD_COLOR_GRAY);
 	display_string(0, LINE(5), "+12V:     V", LEFT_MODE);
@@ -115,6 +118,10 @@ void MeasuringPage::handle_startup_sound() {
 		if (timer.read_ms() >= 1000)
 			audioout.stop();
 	}
+}
+
+void MeasuringPage::cleanup() {
+	audioout.stop();
 }
 
 void MeasuringPage::display_time(float tm) {

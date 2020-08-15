@@ -13,6 +13,7 @@ public:
 	MeasuringPage(psProfile &psRef);
 	void update();
 	void display();
+	void cleanup();
 
 protected:
 	void display_ps_profile();

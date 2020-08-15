@@ -13,7 +13,6 @@ public:
 private:
 	float raw_reading(uint8_t chan);
 
-
 	AnalogIn adcs[6] {
 		CalibrationDefs::channelPins[AdcChannels::voltage12V],
 		CalibrationDefs::channelPins[AdcChannels::voltage5V],

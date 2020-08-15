@@ -68,15 +68,21 @@ public:
 			break;
 
 		case (MEASURING): {
-			measuringPage.timer.reset();
-			measuringPage.timer.start();
-			currentSetter.start();
-			measuringPage.display();
+			if (active_ps.psProfileID == PSProfileID::Manual) {
+				manualPage.timer.reset();
+				manualPage.timer.start();
+				currentSetter.start();
+				manualPage.display();
+			} else {
+				measuringPage.timer.reset();
+				measuringPage.timer.start();
+				currentSetter.start();
+				measuringPage.display();
+			}
 			break;
 		}
 
 		case (MANUAL_MEASURING): {
-			active_ps = psProfiles::ManualMode;
 			manualPage.timer.reset();
 			manualPage.timer.start();
 			currentSetter.start();
@@ -126,6 +132,7 @@ public:
 		case (MEASURING): {
 			measuringPage.update();
 			if (measuringPage.stop_but.is_just_released()) {
+				measuringPage.cleanup();
 				transition_to(MAIN_SCREEN);
 			}
 			break;
@@ -135,6 +142,7 @@ public:
 			manualPage.update();
 			currentSetter.start();
 			if (manualPage.stop_but.is_just_released()) {
+				manualPage.cleanup();
 				transition_to(MAIN_SCREEN);
 			}
 			break;
