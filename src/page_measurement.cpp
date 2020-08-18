@@ -1,7 +1,7 @@
 #include "page_measurement.h"
 #include "display_wrapper.h"
 
-MeasuringPage::MeasuringPage(psProfile &psRef)
+MeasuringPage::MeasuringPage(PSProfile &psRef)
 : ps{psRef}
 {
 	stop_but.rect.x = 60;
@@ -41,20 +41,6 @@ void MeasuringPage::display() {
 	display_measurements();
 
 	stop_but.draw();
-
-	// uint8_t t[] = {
-	// 	250, 200, 150, 100, 50, 10, 60, 110, 210, 250,
-	// 	250, 200, 150, 100, 50, 10, 60, 110, 210, 250,
-	// 	250, 200, 150, 100, 50, 10, 60, 110, 210, 250,
-	// 	250, 200, 150, 100, 50, 10, 60, 110, 210, 250,
-	// 	250, 200, 150, 100, 50, 10, 60, 110, 210, 250,
-	// 	250, 200, 150, 100, 50, 10, 60, 110, 210, 250,
-	// 	250, 200, 150, 100, 50, 10, 60, 110, 210, 250,
-	// 	250, 200, 150, 100, 50, 10, 60, 110, 210, 250,
-	// 	250, 200, 150, 100, 50, 10, 60, 110, 210, 250,
-	// 	250, 200, 150, 100, 50, 10, 60, 110, 210, 250,
-	// };
-	// audioout.play_wav(t, 100, 10000);
 }
 
 

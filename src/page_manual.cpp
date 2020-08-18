@@ -1,7 +1,7 @@
 #include "page_manual.h"
 #include "display_wrapper.h"
 
-ManualMeasuringPage::ManualMeasuringPage(psProfile &psRef)
+ManualMeasuringPage::ManualMeasuringPage(PSProfile &psRef)
 : MeasuringPage(psRef)
 {
 	const uint32_t wid = 25;

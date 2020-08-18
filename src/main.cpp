@@ -20,7 +20,7 @@ public:
 	};
 	AppStates app_state;
 
-	psProfile active_ps;
+	PSProfile active_ps;
 	CurrentSetter currentSetter {active_ps};
 
 	MainPage mainPage;
@@ -33,7 +33,7 @@ public:
 	ItsPowerTimeApp() {
 		currentSetter.stop();
 		//Default Power Supply
-		active_ps = psProfileArray[0];
+		active_ps = psProfileArray.at(PSProfileID::Manual);
 		transition_to(INITIALIZING);
 	}
 
@@ -50,7 +50,7 @@ public:
 			if (!success) {
 				tsErrorPage.display();
 				wait_ms(200);
-				//while(true) {;}
+				while(true) {;}
 			}
 
 			splashPage.display();
@@ -68,7 +68,7 @@ public:
 			break;
 
 		case (MEASURING): {
-			if (active_ps.psProfileID == PSProfileID::Manual) {
+			if (active_ps == psProfileArray.at(PSProfileID::Manual)) {
 				new_state = MANUAL_MEASURING;
 				transition_to(new_state);
 			} else {
@@ -118,9 +118,9 @@ public:
 
 		case (CONFIG): {
 			configPage.update();
-			for (auto &but : configPage.ps_buts) {
-				if (but.is_just_released()) {
-					active_ps = psProfileArray[but.ps_index];
+			for (auto &but : configPage.ps_buts.data) {
+				if (but.element.is_just_released()) {
+					active_ps = psProfileArray.at(but.key);
 					transition_to(MAIN_SCREEN);
 				}
 			}
@@ -138,7 +138,7 @@ public:
 
 		case (MANUAL_MEASURING): {
 			manualPage.update();
-			currentSetter.start();
+			currentSetter.update_outputs();
 			if (manualPage.stop_but.is_just_released()) {
 				manualPage.cleanup();
 				transition_to(MAIN_SCREEN);

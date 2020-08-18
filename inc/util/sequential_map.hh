@@ -17,10 +17,12 @@ public:
         }
         return data[0].element;
     }
+    ValT& operator[](const KeyT key) {
+        for (auto & pair : data) {
+            if (pair.key == key)
+                return pair.element;
+        }
+        return data[0].element;
+    }
 };
-
-// const SequentialMap<PSProfileID, psProfile, 2> sar = {{{
-//     {PSProfileID::RP25, {100, 200, 300, 400}},
-//     {PSProfileID::RP35, {1000, 2000, 3000, 4000}}
-// }}};
 

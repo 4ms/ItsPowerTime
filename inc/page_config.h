@@ -15,6 +15,7 @@ public:
 	void display();
 	void update();
 
-	ConfigButton ps_buts[kNumProfiles];
+	SequentialMap<PSProfileID, Button, kNumPSProfiles> ps_buts;
+	//ConfigButton ps_buts[kNumPSProfiles];
 };
 

@@ -54,8 +54,8 @@ void fill_rounded_rect(uint16_t x, uint16_t y, uint16_t width, uint16_t height, 
 	}
 }
 
-void display_string(uint16_t X, uint16_t Y, const char *pText, Text_AlignModeTypdef mode) {
-	lcd.DisplayStringAt(X, Y, const_cast<uint8_t *>(reinterpret_cast<const uint8_t *>(pText)), mode);
+void display_string(uint16_t X, uint16_t Y, std::string_view /*const char **/pText, Text_AlignModeTypdef mode) {
+	lcd.DisplayStringAt(X, Y, const_cast<uint8_t *>(reinterpret_cast<const uint8_t *>(pText.data())), mode);
 }
 
 void display_string_centered(uint16_t line, const char *pText) {
