@@ -16,23 +16,14 @@ enum class PSProfileID : size_t {
 constexpr size_t kNumPSProfiles = static_cast<size_t>(PSProfileID::NUM_PSPROFILE_IDS);
 
 struct PSProfile {
-	//PSProfileID psProfileID;
 	uint16_t mA_12V;
 	uint16_t mA_5V;
 	uint16_t mA_N12V;
 	uint16_t test_time_s;
 	std::string name;
 
-	constexpr bool operator==(const PSProfile &rhs) {
-		// uint8_t i=0;
-		// for (auto c : this->name)) {
-		// 	if (c != rhs.name[i++])
-		// 		return false;
-		// 	if (c == '\0')
-		// 		return true;
-		// }
-		// return true;
-		return false;
+	bool operator==(const PSProfile &rhs) {
+		return (this->name == rhs.name);
 	}
 };
 
