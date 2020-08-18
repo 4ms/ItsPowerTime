@@ -69,10 +69,8 @@ public:
 
 		case (MEASURING): {
 			if (active_ps.psProfileID == PSProfileID::Manual) {
-				manualPage.timer.reset();
-				manualPage.timer.start();
-				currentSetter.start();
-				manualPage.display();
+				new_state = MANUAL_MEASURING;
+				transition_to(new_state);
 			} else {
 				measuringPage.timer.reset();
 				measuringPage.timer.start();
