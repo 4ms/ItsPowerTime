@@ -48,26 +48,29 @@ OBJECTS += $(OBJDIR)/TS_DISCO_F429ZI/TS_DISCO_F429ZI.o
 
 #SOURCES += $(wildcard *.cpp)
 #SOURCES += $(wildcard *.c)
-SOURCES = measurer.cpp \
-		button.cpp \
-		page_config.cpp \
-		page_main.cpp \
-		page_manual.cpp \
-		page_measurement.cpp \
-		page_splash.cpp \
-		display_wrapper.cpp \
-		main.cpp \
-		measurementTimer.cpp \
-		ts.cpp \
-		current_setter.cpp \
-		audio_out.cpp \
-		filters.cpp \
+SRCDIR = src/
+
+SOURCES = \
+		$(SRCDIR)/measurer.cpp \
+		$(SRCDIR)/button.cpp \
+		$(SRCDIR)/page_config.cpp \
+		$(SRCDIR)/page_main.cpp \
+		$(SRCDIR)/page_manual.cpp \
+		$(SRCDIR)/page_measurement.cpp \
+		$(SRCDIR)/page_splash.cpp \
+		$(SRCDIR)/display_wrapper.cpp \
+		$(SRCDIR)/main.cpp \
+		$(SRCDIR)/measurementTimer.cpp \
+		$(SRCDIR)/ts.cpp \
+		$(SRCDIR)/current_setter.cpp \
+		$(SRCDIR)/audio_out.cpp \
+		$(SRCDIR)/filters.cpp \
 
 OBJECTS += $(addprefix $(OBJDIR)/, $(addsuffix .o, $(basename $(SOURCES))))
 
-# debug:
-# 	@echo $(SOURCES)
-# 	@echo $(OBJECTS)
+#debug:
+#	@echo $(SOURCES)
+#	@echo $(OBJECTS)
 
 SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/PeripheralPins.o
 SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/analogin_api.o
@@ -195,6 +198,7 @@ SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/trng_api.o
 SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/us_ticker.o
 
 INCLUDE_PATHS += -I.
+INCLUDE_PATHS += -Iinc
 #INCLUDE_PATHS += -I/usr/src/mbed-sdk
 INCLUDE_PATHS += -IBSP_DISCO_F429ZI
 INCLUDE_PATHS += -IBSP_DISCO_F429ZI/Drivers
