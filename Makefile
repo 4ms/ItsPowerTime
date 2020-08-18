@@ -46,31 +46,11 @@ OBJECTS += $(OBJDIR)/BSP_DISCO_F429ZI/Utilities/Fonts/font8.o
 OBJECTS += $(OBJDIR)/LCD_DISCO_F429ZI/LCD_DISCO_F429ZI.o
 OBJECTS += $(OBJDIR)/TS_DISCO_F429ZI/TS_DISCO_F429ZI.o
 
-#SOURCES += $(wildcard *.cpp)
-#SOURCES += $(wildcard *.c)
 SRCDIR = src/
-
-SOURCES = \
-		$(SRCDIR)/measurer.cpp \
-		$(SRCDIR)/button.cpp \
-		$(SRCDIR)/page_config.cpp \
-		$(SRCDIR)/page_main.cpp \
-		$(SRCDIR)/page_manual.cpp \
-		$(SRCDIR)/page_measurement.cpp \
-		$(SRCDIR)/page_splash.cpp \
-		$(SRCDIR)/display_wrapper.cpp \
-		$(SRCDIR)/main.cpp \
-		$(SRCDIR)/measurementTimer.cpp \
-		$(SRCDIR)/ts.cpp \
-		$(SRCDIR)/current_setter.cpp \
-		$(SRCDIR)/audio_out.cpp \
-		$(SRCDIR)/filters.cpp \
+SOURCES = $(wildcard $(SRCDIR)/*.cpp)
+SOURCES += $(wildcard $(SRCDIR)/*.c)
 
 OBJECTS += $(addprefix $(OBJDIR)/, $(addsuffix .o, $(basename $(SOURCES))))
-
-#debug:
-#	@echo $(SOURCES)
-#	@echo $(OBJECTS)
 
 SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/PeripheralPins.o
 SYS_OBJECTS += mbed/TARGET_DISCO_F429ZI/TOOLCHAIN_GCC_ARM/analogin_api.o
@@ -235,9 +215,9 @@ ELF2BIN = arm-none-eabi-objcopy
 PREPROC = arm-none-eabi-cpp -E -P -Wl,--gc-sections -Wl,--wrap,main -Wl,--wrap,_malloc_r -Wl,--wrap,_free_r -Wl,--wrap,_realloc_r -Wl,--wrap,_memalign_r -Wl,--wrap,_calloc_r -Wl,--wrap,exit -Wl,--wrap,atexit -Wl,-n -mcpu=cortex-m4 -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=softfp -DMBED_ROM_START=0x8000000 -DMBED_ROM_SIZE=0x200000 -DMBED_RAM1_START=0x10000000 -DMBED_RAM1_SIZE=0x10000 -DMBED_RAM_START=0x20000000 -DMBED_RAM_SIZE=0x30000 -DMBED_BOOT_STACK_SIZE=4096 -DXIP_ENABLE=0
 
 
-C_FLAGS += -std=gnu11
-C_FLAGS += -include
-C_FLAGS += mbed_config.h
+# C_FLAGS += -std=gnu11
+# C_FLAGS += -include
+# C_FLAGS += mbed_config.h
 C_FLAGS += -DCOMPONENT_NSPE=1
 C_FLAGS += -DDEVICE_ANALOGIN=1
 C_FLAGS += -DTARGET_CORTEX_M
@@ -326,11 +306,11 @@ C_FLAGS += -DMBED_RAM1_SIZE=0x10000
 C_FLAGS += -DMBED_RAM_START=0x20000000
 C_FLAGS += -DMBED_RAM_SIZE=0x30000
 
-CXX_FLAGS += -std=gnu++17
-CXX_FLAGS += -fno-rtti
-CXX_FLAGS += -Wvla
-CXX_FLAGS += -include
-CXX_FLAGS += mbed_config.h
+# CXX_FLAGS += -std=gnu++17
+# CXX_FLAGS += -fno-rtti
+# CXX_FLAGS += -Wvla
+# CXX_FLAGS += -include
+# CXX_FLAGS += mbed_config.h
 CXX_FLAGS += -DCOMPONENT_NSPE=1
 CXX_FLAGS += -DDEVICE_ANALOGIN=1
 CXX_FLAGS += -DTARGET_CORTEX_M
