@@ -20,7 +20,7 @@ public:
 	};
 	AppStates app_state;
 
-	psProfile active_ps;
+	PSProfile active_ps;
 	CurrentSetter currentSetter {active_ps};
 
 	MainPage mainPage;

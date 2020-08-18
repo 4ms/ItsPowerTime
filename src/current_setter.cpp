@@ -2,7 +2,7 @@
 #include "current_setter.h"
 #include "calibration_defs.h"
 
-CurrentSetter::CurrentSetter(psProfile &psRef)
+CurrentSetter::CurrentSetter(PSProfile &psRef)
 : ps{psRef}
 {
 	stop();

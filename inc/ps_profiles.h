@@ -12,7 +12,7 @@ enum class PSProfileID {
 	Old_Pod_60_2PCBS
 };
 
-struct psProfile {
+struct PSProfile {
 	PSProfileID psProfileID;
 	uint16_t mA_12V;
 	uint16_t mA_5V;
@@ -24,7 +24,7 @@ struct psProfile {
 //Todo: use to_array() and then kNumProfiles is ProfileArray.size()
 constexpr uint8_t kNumProfiles = 9;
 //const std::array<psProfile, kNumProfiles> psProfileArray = {
-const psProfile psProfileArray[kNumProfiles] = {
+const PSProfile psProfileArray[kNumProfiles] = {
 	{ PSProfileID::Pod20_26_32, 700, 1000, 280, 5*60, "Pod 20-32" },
 	{ PSProfileID::PodX_60,        	1400, 1000, 670, 5*60, "PodX/60" },
 	{ PSProfileID::RP25,           	1000, 500, 1000, 5*60, "RP 25" },

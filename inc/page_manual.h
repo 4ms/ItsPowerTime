@@ -8,7 +8,7 @@
 
 class ManualMeasuringPage : public MeasuringPage {
 public:
-	ManualMeasuringPage(psProfile &psRef);
+	ManualMeasuringPage(PSProfile &psRef);
 	void display();
 	void update();
 

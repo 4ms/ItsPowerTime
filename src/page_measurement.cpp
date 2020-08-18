@@ -1,7 +1,7 @@
 #include "page_measurement.h"
 #include "display_wrapper.h"
 
-MeasuringPage::MeasuringPage(psProfile &psRef)
+MeasuringPage::MeasuringPage(PSProfile &psRef)
 : ps{psRef}
 {
 	stop_but.rect.x = 60;
