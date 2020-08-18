@@ -12,7 +12,7 @@ enum class PSProfileID {
 	Old_Pod_60_2PCBS
 };
 
-struct psProfile {
+struct PSProfile {
 	PSProfileID psProfileID;
 	uint16_t mA_12V;
 	uint16_t mA_5V;

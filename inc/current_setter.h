@@ -6,7 +6,7 @@
 //Todo: ctor of CurrentSetter constructs PwmOut members and pin numbers are passed as args (so pin numbers can be stored in a central place)
 class CurrentSetter {
 public:
-	CurrentSetter(psProfile &psRef);
+	CurrentSetter(PSProfile &psRef);
 
 	void start();
 	void update_outputs();
@@ -20,8 +20,8 @@ private:
 	PwmOut setN12A {PB_4}; //is PB_5 on p2 board: won't run (hardfault on init?)
 	PwmOut set5A {PB_7};
 	PwmOut set12A {PC_8}; //is PB_6 on p2 board: interferes with screen
-	psProfile &ps;
-	psProfile max_;
+	PSProfile &ps;
+	PSProfile max_;
 
 	float adjust_output(uint16_t unadjusted, int16_t offset, uint16_t max);
 };

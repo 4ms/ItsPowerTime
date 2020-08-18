@@ -10,7 +10,7 @@
 
 class MeasuringPage : public Page {
 public:
-	MeasuringPage(psProfile &psRef);
+	MeasuringPage(PSProfile &psRef);
 	void update();
 	void display();
 	void cleanup();
@@ -29,7 +29,7 @@ public:
 	MeasurementReader measurer;
 
 protected:
-	psProfile &ps;
+	PSProfile &ps;
 	PWMAudioOutput audioout;
 };
 
