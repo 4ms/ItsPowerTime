@@ -3,11 +3,15 @@
 #include <stdint.h>
 #include "filters.hh"
 #include "calibration_defs.h"
+#include "channel_defs.h"
 
 class MeasurementReader {
 public:
 	float get_average(uint8_t chan);
+	float get_max(uint8_t chan);
+	float get_min(uint8_t chan);
 	void reset_all_averages();
+	void reset_all_minmax();
 	void update_all_averages();
 
 private:
@@ -22,10 +26,7 @@ private:
 		CalibrationDefs::channelPins[AdcChannels::currentN12V]
 	};
 	SimpleAverage averages[6];
+	float maxes[6] = {-999999999.F};
+	float mins[6] = {999999999.F};
 };
 
-//PC0: MEMS CS, won't boot
-//PA1 won't work
-//PA2 won't work
-//PC4 sorta ok -- has 10k pull-up and is Enable for STMPS2141STR (1705)
-//PC5 sorta ok -- has 47k pullup || 620R+LED, and is Fault output of SRMPS214

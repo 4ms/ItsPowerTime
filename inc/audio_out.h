@@ -13,6 +13,6 @@ public:
 	bool is_playing;
 
 private:
-	PwmOut audioout {PE_5};
+	static inline PwmOut audioout {PE_5};
 };
 

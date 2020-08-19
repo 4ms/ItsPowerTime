@@ -3,6 +3,7 @@
 #include "mbed.h"
 #include "ps_profiles.h"
 
+using namespace PSProfiles;
 //Todo: ctor of CurrentSetter constructs PwmOut members and pin numbers are passed as args (so pin numbers can be stored in a central place)
 class CurrentSetter {
 public:

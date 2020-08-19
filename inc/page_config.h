@@ -4,6 +4,8 @@
 #include "button.h"
 #include "ps_profiles.h"
 
+using namespace PSProfiles;
+
 class ConfigButton : public Button {
 public:
 	uint8_t ps_index;

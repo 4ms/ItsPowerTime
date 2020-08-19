@@ -54,6 +54,12 @@ void fill_rounded_rect(uint16_t x, uint16_t y, uint16_t width, uint16_t height, 
 	}
 }
 
+void display_number(uint16_t X, uint16_t Y, int number, const char *format, Text_AlignModeTypdef mode) {
+	char num_string[30];
+	if (snprintf(num_string, sizeof num_string, format, number) >=0 )
+		display_string(X, Y, num_string, mode);
+}
+
 void display_string(uint16_t X, uint16_t Y, const char *pText, Text_AlignModeTypdef mode) {
 	lcd.DisplayStringAt(X, Y, const_cast<uint8_t *>(reinterpret_cast<const uint8_t *>(pText)), mode);
 }

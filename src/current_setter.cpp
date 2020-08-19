@@ -1,5 +1,6 @@
 #include "mbed.h"
 #include "current_setter.h"
+#include "channel_defs.h"
 #include "calibration_defs.h"
 
 CurrentSetter::CurrentSetter(PSProfile &psRef)

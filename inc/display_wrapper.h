@@ -17,6 +17,7 @@ void fill_rect(uint16_t x, uint16_t y, uint16_t width, uint16_t height);
 void fill_rounded_rect(uint16_t x, uint16_t y, uint16_t width, uint16_t height, uint16_t radius);
 void display_string(uint16_t X, uint16_t Y, const char *pText, Text_AlignModeTypdef mode);
 void display_string_centered(uint16_t line, const char *pText);
+void display_number(uint16_t X, uint16_t Y, int number, const char *format, Text_AlignModeTypdef mode);
 uint32_t get_display_size_x();
 uint32_t get_display_size_y();
 uint16_t get_font_line_height(FontSizes size);
