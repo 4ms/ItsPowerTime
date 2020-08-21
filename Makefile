@@ -402,6 +402,12 @@ CXX_FLAGS += -DMBED_RAM1_SIZE=0x10000
 CXX_FLAGS += -DMBED_RAM_START=0x20000000
 CXX_FLAGS += -DMBED_RAM_SIZE=0x30000
 
+C_FLAGS += -fsingle-precision-constant
+#C_FLAGS += -Wdouble-promotion
+CXX_FLAGS += -fsingle-precision-constant
+# CXX_FLAGS += -Wdouble-promotion
+
+
 ASM_FLAGS += -x
 ASM_FLAGS += assembler-with-cpp
 ASM_FLAGS += -DUSE_FULL_LL_DRIVER

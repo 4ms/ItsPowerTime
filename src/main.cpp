@@ -39,7 +39,7 @@ public:
 	ItsPowerTimeApp() {
 		currentSetter.stop();
 		//Default Power Supply
-		active_ps = psProfileArray[0];
+		active_ps = psProfileArray.at(PSProfileID::Manual);
 		transition_to(INITIALIZING);
 	}
 
@@ -126,9 +126,9 @@ public:
 
 			case (CONFIG): {
 				configPage.update();
-				for (auto &but : configPage.ps_buts) {
-					if (but.is_just_released()) {
-						active_ps = psProfileArray[but.ps_index];
+				for (auto &but : configPage.ps_buts.data) {
+					if (but.element.is_just_released()) {
+						active_ps = psProfileArray.at(but.key);
 						transition_to(MAIN_SCREEN);
 					}
 				}
@@ -157,7 +157,7 @@ public:
 
 			case (MANUAL_MEASURING): {
 				manualPage.update();
-				currentSetter.start();
+				currentSetter.update_outputs();
 				if (manualPage.stop_but.is_just_released()) {
 					manualPage.cleanup();
 					transition_to(MAIN_SCREEN);
