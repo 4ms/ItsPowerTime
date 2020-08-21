@@ -105,8 +105,12 @@ void MeasuringPage::update() {
 		}
 	}
 
-	if (timer.read_ms() > (ps.test_time_s * 1000)) {
+	if ((timer.read_ms() > (ps.test_time_s * 1000)) && !did_fail) {
 		did_pass = true;
+		for (auto &r : results) {
+			if (!r.passed)
+				did_pass = false;
+		}
 	}
 
 	handle_startup_sound();
@@ -114,46 +118,70 @@ void MeasuringPage::update() {
 
 void MeasuringPage::check_for_failures() {
 	const uint16_t kStabilizationTime = 3000;
+	const float kVoltageTolerance = 1.0F;
+	const float kCurrentTolerance = 200.0F;
 
 	if (timer.read_ms() >= kStabilizationTime) {
-		check_for_failure(AdcChannels::voltage12V, 12.0F);
-		check_for_failure(AdcChannels::voltage5V, 5.0F);
-		check_for_failure(AdcChannels::voltageN12V, 12.0F);
+		//Todo:
+		//for (auto &chan : AdcChannelList)
+		//    check_for_failure(chan);
+		//    void check_for_failure(AdcChannel chan) {
+		//        expected_val = ps.val[chan]; 
+		//        tolerance = ps.tolerance[chan];
+		//    // PSProfile { 
+		// 		PSPRofileID psPRofileID;
+		//    	float val[NumAdcChannels];
+		//    	float tolerance[NumAdcChannels];
+		//    	uint16_t test_time_s;
+		//    	}
+		//
+		//    	const PSProfile psPRofileArray[] = {
+		// 	      {Pod20, {12.0F, 5.0F, 12.0F, 700, 1000, 280}, {1.0, 1.0, 1.0, 100, 100, 50}, 10*60},
+		//    	}
+		//    	
+		check_for_failure(AdcChannels::voltage12V, 12.0F, kVoltageTolerance);
+		check_for_failure(AdcChannels::voltage5V, 5.0F, kVoltageTolerance);
+		check_for_failure(AdcChannels::voltageN12V, 12.0F, kVoltageTolerance);
+		check_for_failure(AdcChannels::current12V, (float)ps.mA_12V, kCurrentTolerance);
+		check_for_failure(AdcChannels::current5V, (float)ps.mA_5V, kCurrentTolerance);
+		check_for_failure(AdcChannels::currentN12V, (float)ps.mA_N12V, kCurrentTolerance);
 	} else {
 		measurer.reset_all_minmax();
 	}
 }
 
 //Todo: Checker class
-void MeasuringPage::register_fail(AdcChannels chan, ResultType::FailCode code) {
+void MeasuringPage::register_fail(AdcChannels chan, float bad_value, ResultType::FailCode code) {
 	did_fail = true;
 	results[chan].passed = false;
 	results[chan].fail_time = timer.read_ms();
-	results[chan].failure_type = code;
+	results[chan].set_fail_code(code);
+	results[chan].failed_value = bad_value;
 }
 
-void MeasuringPage::check_for_failure(AdcChannels chan, float expected_val) {
-	const float kVoltageTolerance = 10.0F;
+void MeasuringPage::check_for_failure(AdcChannels chan, float expected_val, float tolerance) {
 	if (results[chan].passed) {
 		float actual_val = measurer.get_average(chan);
-		if ((actual_val - expected_val) > kVoltageTolerance) {
-			register_fail(chan, ResultType::FailCode::AVERAGE_TOO_HIGH);
+		if ((actual_val - expected_val) > tolerance) {
+			register_fail(chan, actual_val, ResultType::FailCode::AVERAGE_TOO_HIGH);
 		}
-		if ((expected_val - actual_val) > kVoltageTolerance) {
-			register_fail(chan, ResultType::FailCode::AVERAGE_TOO_LOW);
+		if ((expected_val - actual_val) > tolerance) {
+			register_fail(chan, actual_val, ResultType::FailCode::AVERAGE_TOO_LOW);
 		}
-		if ((measurer.get_max(chan) - expected_val) > kVoltageTolerance) {
-			register_fail(chan, ResultType::FailCode::SPIKE);
+		actual_val = measurer.get_max(chan);
+		if ((actual_val - expected_val) > tolerance) {
+			register_fail(chan, actual_val, ResultType::FailCode::SPIKE);
 		}
-		if ((expected_val - measurer.get_min(chan)) > kVoltageTolerance) {
-			register_fail(chan, ResultType::FailCode::DIP);
+		actual_val = measurer.get_min(chan);
+		if ((expected_val - actual_val) > tolerance) {
+			register_fail(chan, actual_val, ResultType::FailCode::DIP);
 		}
 	}
 }
 
 void MeasuringPage::handle_startup_sound() {
 	if (audioout.is_playing) {
-		if (timer.read_ms() >= 1000)
+		if (timer.read_ms() >= 100)
 			audioout.stop();
 	}
 }
@@ -167,7 +195,7 @@ void MeasuringPage::start() {
 
 	timer.reset();
 	timer.start();
-	audioout.start_buzzer(100);
+	audioout.start_buzzer(200);
 	display();
 }
 

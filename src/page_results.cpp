@@ -1,6 +1,6 @@
 #include "page_results.h"
 #include "display_wrapper.h"
-#include "channel_defs.h"
+//#include "util/iterator.hh"
 
 ResultsPage::ResultsPage() {
 	continue_but.rect.x = 60;
@@ -15,18 +15,16 @@ ResultsPage::ResultsPage() {
 }
 
 FailResultsPage::FailResultsPage() {
-	flash_color_1 = LCD_COLOR_RED;
-	flash_color_2 = LCD_COLOR_WHITE;
-	bg_color = flash_color_1;
-	fg_color = flash_color_2;
+	bg_col = LCD_COLOR_RED;
+	flash_bg_color = bg_col;
+	flash_fg_color = LCD_COLOR_WHITE;
 	strcpy(result_string, "FAIL");
 }
 
 PassResultsPage::PassResultsPage() {
-	flash_color_1 = LCD_COLOR_GREEN;
-	flash_color_2 = LCD_COLOR_WHITE;
-	bg_color = flash_color_1;
-	fg_color = flash_color_2;
+	bg_col = LCD_COLOR_GREEN;
+	flash_bg_color = bg_col;
+	flash_fg_color = LCD_COLOR_WHITE;
 	strcpy(result_string, "PASS");
 }
 
@@ -35,36 +33,51 @@ void ResultsPage::set_results(ResultType *results) {
 }
 
 void ResultsPage::display() {
-	fill_screen(bg_color);
-	set_bg_color(bg_color);
-	set_fg_color(fg_color);
-	set_font_size(FONT_SIZE_BIG);
-	display_string_centered(1, result_string);
+	fill_screen(bg_col);
+	//todo: display time
+	display_flashing();
 	continue_but.draw();
 }
 
+void ResultsPage::display_flashing() {
+	//Flashing PASS/FAIL
+	set_fg_color(flash_bg_color);
+	fill_rect(0, 0, 240, 50);
+	set_bg_color(flash_bg_color);
+	set_fg_color(flash_fg_color);
+	set_font_size(FONT_SIZE_BIG);
+	display_string_centered(1, result_string);
+}
+
+void FailResultsPage::display_result(AdcChannels chan) {
+	char str[10];
+	AdcChannelNames::get_string(chan, str);
+	const uint8_t line_height = 20;
+	const uint8_t top_margin = 60;
+	const uint8_t ypos = (static_cast<uint8_t>(chan) * line_height) + top_margin;
+	set_font_size(FONT_SIZE_SMALL);
+	set_fg_color(LCD_COLOR_BLACK);
+	set_bg_color(bg_col);
+	display_string(0, ypos, str, LEFT_MODE);
+	if (test_results[chan].passed) {
+		set_fg_color(LCD_COLOR_GREEN);
+		display_string(85, ypos, "pass", LEFT_MODE);
+	} else {
+		set_fg_color(LCD_COLOR_BLACK);
+		display_float(130, ypos, test_results[chan].failed_value, "=%2.02f", LEFT_MODE);
+		display_int(0, ypos, (test_results[chan].fail_time/1000), "@%ds", RIGHT_MODE);
+		//display_string(0, ypos, test_results[chan].fail_type_string, RIGHT_MODE);
+		display_string(85, ypos, "FAIL", LEFT_MODE);
+	}
+}
+
+
 void FailResultsPage::display() {
 	ResultsPage::display();
-	set_bg_color(bg_color);
-	set_fg_color(fg_color);
-	set_font_size(FONT_SIZE_SMALL);
 
-	set_fg_color(LCD_COLOR_BLACK);
-	display_string(0, 60, "12V: ", LEFT_MODE);
-	if (test_results[AdcChannels::voltage12V].passed) {
-		set_fg_color(LCD_COLOR_GREEN);
-		display_string(50, 60, "pass", LEFT_MODE);
-	} else {
-		set_fg_color(fg_color);
-		display_string(50, 60, "FAIL", LEFT_MODE);
-		set_fg_color(LCD_COLOR_BLACK);
-		display_number(130, 60, (test_results[AdcChannels::voltage12V].fail_time/1000), "@%ds", LEFT_MODE);
-		//test_results.result_string(res);
+	for (auto chan : {voltage12V, voltage5V, voltageN12V, current12V, current5V, currentN12V}) {
+		display_result(chan);
 	}
-	
-
-		// , voltage5V, voltageN12V,
-	// current12V, current5V, currentN12V,
 }
 
 void PassResultsPage::display() {
@@ -92,32 +105,25 @@ void ResultsPage::cleanup() {
 }
 
 void ResultsPage::update() {
+	if ((timer.read_ms() - timer.last_time_read) > 500) {
+		bool invert_screen = (flash_bg_color == bg_col);
+		flash_bg_color = invert_screen ? LCD_COLOR_WHITE : bg_col;
+		flash_fg_color = invert_screen ? bg_col : LCD_COLOR_WHITE;
+		display_flashing();
+
+		timer.last_time_read = timer.read_ms();
+	}
 	continue_but.update();
 }
 
 void FailResultsPage::update() {
-	if ((timer.read_ms() - timer.last_time_read) > 500) {
-		bool invert_screen = (bg_color == LCD_COLOR_RED);
-		bg_color = invert_screen ? LCD_COLOR_WHITE : LCD_COLOR_RED;
-		fg_color = invert_screen ? LCD_COLOR_RED : LCD_COLOR_WHITE;
-		uint16_t freq = invert_screen ? 800 : 1000;
+	uint16_t freq = (flash_bg_color==bg_col) ? 800 : 1000;
+	if (audio.get_buzzer_freq() != freq)
 		audio.start_buzzer(freq);
-		display();
-
-		timer.last_time_read = timer.read_ms();
-	}
 	ResultsPage::update();
 }
 
 void PassResultsPage::update() {
-	if ((timer.read_ms() - timer.last_time_read) > 500) {
-		bool invert_screen = (bg_color == LCD_COLOR_GREEN);
-		bg_color = invert_screen ? LCD_COLOR_WHITE : LCD_COLOR_GREEN;
-		fg_color = invert_screen ? LCD_COLOR_GREEN : LCD_COLOR_WHITE;
-		display();
-
-		timer.last_time_read = timer.read_ms();
-	}
 	ResultsPage::update();
 }
 

@@ -10,24 +10,32 @@ struct ResultType {
 	};
 	bool passed;
 	uint32_t fail_time;
-	FailCode failure_type;
+	float failed_value;
+	FailCode fail_code;
+	char fail_type_string[20];
 
-	void set_result_string(char *str) const {
-		switch (failure_type) {
+	void set_fail_code(const FailCode code) {
+		fail_code = code;
+		set_result_string();
+	}
+
+private:
+	void set_result_string() {
+		switch (fail_code) {
 			case (SPIKE):
-				strcpy(str, "Spike");
+				strcpy(fail_type_string, "Spike");
 				break;
 			case (DIP):
-				strcpy(str, "Dip");
+				strcpy(fail_type_string, "Dip");
 				break;
 			case (AVERAGE_TOO_LOW):
-				strcpy(str, "Low Average");
+				strcpy(fail_type_string, "Low Average");
 				break;
 			case (AVERAGE_TOO_HIGH):
-				strcpy(str, "High Average");
+				strcpy(fail_type_string, "High Average");
 				break;
 			default:
-				strcpy(str, "?");
+				strcpy(fail_type_string, "?");
 				break;
 		}
 	}

@@ -28,9 +28,9 @@ private:
 	void handle_startup_sound();
 	void display_measurements();
 	void display_time(float tm);
-	void check_for_failure(AdcChannels chan, float expected_val);
+	void check_for_failure(AdcChannels chan, float expected_val, float tolerance);
 	void check_for_failures();
-	void register_fail(AdcChannels chan, ResultType::FailCode code);
+	void register_fail(AdcChannels chan, float bad_value, ResultType::FailCode code);
 
 public:
 	Button stop_but;

@@ -4,14 +4,19 @@ PWMAudioOutput::PWMAudioOutput() {
 	audioout.period_us(1); //1MHz
 	audioout.write(0.0);
 	is_playing = false;
+	buzzer_freq = 0;
 }
 
+uint16_t PWMAudioOutput::get_buzzer_freq() {
+	return buzzer_freq;
+}
 
 void PWMAudioOutput::start_buzzer(uint16_t frequency) {
 	float period_us = 1000000.0f / (float)frequency;
 	audioout.period_us(period_us);
-	audioout.write(0.5);
+	//audioout.write(0.5);
 	is_playing = true;
+	buzzer_freq = frequency;
 }
 
 void PWMAudioOutput::stop() {

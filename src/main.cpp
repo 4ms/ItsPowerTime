@@ -77,6 +77,7 @@ public:
 					new_state = MANUAL_MEASURING;
 					transition_to(new_state);
 				} else {
+					active_ps = psProfileArray[active_ps.psProfileID]; //reload
 					currentSetter.start();
 					measuringPage.start();
 				}
@@ -143,6 +144,7 @@ public:
 				if (measuringPage.failed()) {
 					measuringPage.cleanup();
 					failResultPage.set_results(measuringPage.results);
+					//measuringPage.get_results(failResultPage.results);
 					transition_to(SHOW_FAIL_RESULTS);
 				}
 				if (measuringPage.passed()) {
