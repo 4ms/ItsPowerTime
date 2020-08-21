@@ -36,6 +36,12 @@ MainPage::MainPage() {
 
 void MainPage::display() {
 	fill_screen(LCD_COLOR_WHITE);
+
+	set_font_size(FONT_SIZE_MED);
+	set_fg_color(LCD_COLOR_BLACK);
+	set_bg_color(LCD_COLOR_WHITE);
+	display_string(0, 150 , psname, CENTER_MODE);
+
 	start_but.draw();
 	config_but.draw();
 	manual_but.draw();

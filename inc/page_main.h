@@ -13,5 +13,6 @@ public:
 	Button start_but;
 	Button config_but;
 	Button manual_but;
+	std::string_view psname="";
 };
 
