@@ -39,7 +39,7 @@ public:
 	ItsPowerTimeApp() {
 		currentSetter.stop();
 		//Default Power Supply
-		active_ps = psProfileArray.at(PSProfileID::Manual);
+		active_ps = psProfileArray[PSProfileID::Manual];
 		transition_to(INITIALIZING);
 	}
 
@@ -73,7 +73,7 @@ public:
 				break;
 
 			case (MEASURING): {
-				if (active_ps == psProfileArray.at(PSProfileID::Manual)) {
+				if (active_ps == psProfileArray[PSProfileID::Manual]) {
 					new_state = MANUAL_MEASURING;
 					transition_to(new_state);
 				} else {
@@ -126,9 +126,9 @@ public:
 
 			case (CONFIG): {
 				configPage.update();
-				for (auto &but : configPage.ps_buts.data) {
-					if (but.element.is_just_released()) {
-						active_ps = psProfileArray.at(but.key);
+				for (auto &but : configPage.ps_buts) {
+					if (but.is_just_released()) {
+						active_ps = psProfileArray[but.ps_index];
 						transition_to(MAIN_SCREEN);
 					}
 				}

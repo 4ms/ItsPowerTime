@@ -11,18 +11,16 @@ ConfigPage::ConfigPage() {
 	uint16_t height = (get_display_size_y() - (y_spacing * (rows - 1)) - top_margin) / rows;
 	uint16_t cur_row = 0;
 	uint16_t cur_col = 0;
-	//uint8_t ps_i = 0;
 	
 	for (auto &ps : psProfileArray.data) {
-	//for (auto &but : ps_buts.data) {
-		Button &but = ps_buts[ps.key];
-		//but.element.ps_index = but.key;
+		auto &but = ps_buts[ps.key];
+		but.ps_index = ps.key;
 		but.rect.x = cur_col * (width + x_spacing);
 		but.rect.y = cur_row * (height + y_spacing) + top_margin;
 		but.rect.width = width;
 		but.rect.height = height;
 		but.rect.radius = 3;
-		but.text = psProfileArray.at(ps.key).name;
+		but.text = psProfileArray[ps.key].name;
 		if (but.text.length() > 9)
 			but.fontsize = FONT_SIZE_VERY_SMALL;
 		else
@@ -35,7 +33,6 @@ ConfigPage::ConfigPage() {
 			if (++cur_col >= cols)
 				break;
 		}
-		//ps_i++;
 	}
 
 }
@@ -46,14 +43,14 @@ void ConfigPage::display() {
 	set_fg_color(LCD_COLOR_BLACK);
 	set_font_size(FONT_SIZE_MED);
 	display_string_centered(0, "Select PS:");
-	for (auto &but : ps_buts.data) {
-		but.element.draw();
+	for (auto &but : ps_buts) {
+		but.draw();
 	}
 }
 
 void ConfigPage::update() {
-	for (auto &but : ps_buts.data) {
-		but.element.update();
+	for (auto &but : ps_buts) {
+		but.update();
 	}
 }
 

@@ -5,12 +5,12 @@ template<typename KeyT, typename ValT, size_t N>
 class SequentialMap {
 public:
     struct PairT {
-        KeyT key;
+        const KeyT key;
         ValT element;
     };
     std::array<PairT, N> data;
 
-    const ValT& at(const KeyT key) const {
+    const ValT& operator[](const KeyT key) const {
         for (auto & pair : data) {
             if (pair.key == key)
                 return pair.element;
