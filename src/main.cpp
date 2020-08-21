@@ -73,11 +73,11 @@ public:
 				break;
 
 			case (MEASURING): {
-				if (active_ps.psProfileID == PSProfileID::Manual) {
+				if (active_ps == psProfileArray.at(PSProfileID::Manual)) {
 					new_state = MANUAL_MEASURING;
 					transition_to(new_state);
 				} else {
-					active_ps = psProfileArray[active_ps.psProfileID]; //reload
+					//active_ps = psProfileArray[ctive_ps.psProfileID]; //reload
 					currentSetter.start();
 					measuringPage.start();
 				}
