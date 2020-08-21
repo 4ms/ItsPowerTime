@@ -92,10 +92,12 @@ public:
 			}
 
 			case (SHOW_PASS_RESULTS):
+				currentSetter.stop();
 				passResultPage.start();
 				break;
 
 			case (SHOW_FAIL_RESULTS):
+				currentSetter.stop();
 				failResultPage.start();
 				break;
 
@@ -145,7 +147,7 @@ public:
 				if (measuringPage.failed()) {
 					measuringPage.cleanup();
 					failResultPage.set_results(measuringPage.results);
-					//measuringPage.get_results(failResultPage.results);
+					//Or does it make more sense to say: failResultsPage.results = measuringPage.get_results();
 					transition_to(SHOW_FAIL_RESULTS);
 				}
 				if (measuringPage.passed()) {

@@ -18,9 +18,9 @@ public:
 	void set_max_5V_mA(uint16_t mA);
 
 private:
-	PwmOut setN12A {PB_4}; //is PB_5 on p2 board: won't run (hardfault on init?)
+	PwmOut setN12A {PB_4}; //use PB_13 on p4
 	PwmOut set5A {PB_7};
-	PwmOut set12A {PC_8}; //is PB_6 on p2 board: interferes with screen
+	PwmOut set12A {PC_8};
 	PSProfile &ps;
 	PSProfile max_;
 
