@@ -25,43 +25,26 @@ void PWMAudioOutput::stop() {
 	is_playing = false;
 }
 
-void PWMAudioOutput::play_wav(uint8_t *wavdata, uint32_t num_samples, uint16_t sample_freq) {
-	float period_us = 1000000.0f / (float)sample_freq;
-	audioout.period_us(10);
-
-	//Todo: start a timer with an interrupt, and do the playback inside the ISR
-	for (uint32_t i=0; i<num_samples; i++) {
-		float sample = (float)wavdata[i] / 255.0f;
-		audioout.write(sample);
-		wait_us(period_us);
-	}
-	stop();
+void PWMAudioOutput::play_wav(const uint8_t * const wavdata, const uint32_t num_samples, const float sample_freq) {
+	audioout.period_us(64);
+	//Todo: is_playing won't work for wav files unless we attach a reference or callback for WavPlayer to do when it's done
+	is_playing = true;
+	wav_player.idx = 0;
+	wav_player.size = num_samples;
+	wav_player.data = wavdata;
+	wav_player.period_us = static_cast<uint32_t>(1000000.0f / sample_freq);
+	//wav_player.callback_timer.attach_us(&wav_player.play_next_sample, wav_player.period_us);
+	//wav_callback = wav_player.play_next_sample;
+	auto cb = callback(&wav_player, &WavPlayer::play_next_sample);
+	wav_player.callback_timer.attach_us(cb, wav_player.period_us);
 }
 
-	// uint8_t t[] = {
-	// 	250, 200, 150, 100, 50, 10, 60, 110, 210, 250,
-	// 	250, 200, 150, 100, 50, 10, 60, 110, 210, 250,
-	// 	250, 200, 150, 100, 50, 10, 60, 110, 210, 250,
-	// 	250, 200, 150, 100, 50, 10, 60, 110, 210, 250,
-	// 	250, 200, 150, 100, 50, 10, 60, 110, 210, 250,
-	// 	250, 200, 150, 100, 50, 10, 60, 110, 210, 250,
-	// 	250, 200, 150, 100, 50, 10, 60, 110, 210, 250,
-	// 	250, 200, 150, 100, 50, 10, 60, 110, 210, 250,
-	// 	250, 200, 150, 100, 50, 10, 60, 110, 210, 250,
-	// 	250, 200, 150, 100, 50, 10, 60, 110, 210, 250,
-	// };
-	// audioout.play_wav(t, 100, 10000);
+void WavPlayer::play_next_sample() {
+	float sample = (float)(data[idx]) / 255.0f;
+	audio.write(sample);
+	if (++idx >= size) {
+		callback_timer.detach();
+		audio.write(0.0f);
+	}
+}
 
-	// uint8_t t[] = {
-	// 	250, 200, 150, 100, 50, 10, 60, 110, 210, 250,
-	// 	250, 200, 150, 100, 50, 10, 60, 110, 210, 250,
-	// 	250, 200, 150, 100, 50, 10, 60, 110, 210, 250,
-	// 	250, 200, 150, 100, 50, 10, 60, 110, 210, 250,
-	// 	250, 200, 150, 100, 50, 10, 60, 110, 210, 250,
-	// 	250, 200, 150, 100, 50, 10, 60, 110, 210, 250,
-	// 	250, 200, 150, 100, 50, 10, 60, 110, 210, 250,
-	// 	250, 200, 150, 100, 50, 10, 60, 110, 210, 250,
-	// 	250, 200, 150, 100, 50, 10, 60, 110, 210, 250,
-	// 	250, 200, 150, 100, 50, 10, 60, 110, 210, 250,
-	// };
-	// audioout.play_wav(t, 100, 10000);

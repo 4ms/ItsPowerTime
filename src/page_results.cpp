@@ -1,6 +1,6 @@
 #include "page_results.h"
 #include "display_wrapper.h"
-//#include "util/iterator.hh"
+#include "wav_library.hh"
 
 ResultsPage::ResultsPage() {
 	continue_but.rect.x = 60;
@@ -92,7 +92,9 @@ void ResultsPage::start() {
 
 void FailResultsPage::start() {
 	ResultsPage::start();
-	audio.start_buzzer(1000);
+	//audio.start_buzzer(1000);
+	//audio.play_wav(WavLibrary::get_sound(WavLibrary::Fail));
+	audio.play_wav(WavFile::chirp_400_200, 8000, 4000.0f);
 }
 
 void PassResultsPage::start() {
@@ -117,9 +119,6 @@ void ResultsPage::update() {
 }
 
 void FailResultsPage::update() {
-	uint16_t freq = (flash_bg_color==bg_col) ? 800 : 1000;
-	if (audio.get_buzzer_freq() != freq)
-		audio.start_buzzer(freq);
 	ResultsPage::update();
 }
 
