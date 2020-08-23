@@ -117,7 +117,7 @@ void MeasuringPage::update() {
 }
 
 void MeasuringPage::check_for_failures() {
-	const uint16_t kStabilizationTime = 3000;
+	const uint16_t kStabilizationTime = 1000;
 	const float kVoltageTolerance = 1.0F;
 	const float kCurrentTolerance = 200.0F;
 
@@ -180,10 +180,8 @@ void MeasuringPage::check_for_failure(AdcChannels chan, float expected_val, floa
 }
 
 void MeasuringPage::handle_startup_sound() {
-	if (audioout.is_playing) {
-		if (timer.read_ms() >= 100)
-			audioout.stop();
-	}
+	if (timer.read_ms() >= 100)
+		audioout.stop();
 }
 
 void MeasuringPage::start() {
@@ -195,7 +193,7 @@ void MeasuringPage::start() {
 
 	timer.reset();
 	timer.start();
-	audioout.start_buzzer(200);
+	audioout.play_buzzer(200, 0.8f);
 	display();
 }
 

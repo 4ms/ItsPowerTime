@@ -40,7 +40,7 @@ public:
 
 protected:
 	PSProfile &ps;
-	PWMAudioOutput audioout;
+	AudioOutput audioout;
 
 private:
 	bool did_fail;

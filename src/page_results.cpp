@@ -92,14 +92,13 @@ void ResultsPage::start() {
 
 void FailResultsPage::start() {
 	ResultsPage::start();
-	//audio.start_buzzer(1000);
 	//audio.play_wav(WavLibrary::get_sound(WavLibrary::Fail));
-	audio.play_wav(WavFile::chirp_400_200, 8000, 4000.0f);
+	audio.play_wav(WavFile::chirp_400_200, 8000, 16000.0f);
 }
 
 void PassResultsPage::start() {
 	ResultsPage::start();
-	audio.start_buzzer(200);
+	audio.play_buzzer(200, 0.8f);
 }
 
 void ResultsPage::cleanup() {

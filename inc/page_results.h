@@ -23,7 +23,7 @@ public:
 protected:
 	void display_flashing();
 	MeasurementTimer timer;
-	PWMAudioOutput audio;
+	AudioOutput audio;
 	uint32_t flash_bg_color;
 	uint32_t flash_fg_color;
 	uint32_t bg_col;
