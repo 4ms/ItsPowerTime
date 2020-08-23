@@ -1,3 +1,4 @@
+namespace WavFile {
 const uint8_t wav_shot7[12671] = {
   127,
   128,
@@ -12671,4 +12672,4 @@ const uint8_t wav_shot7[12671] = {
   127,
   128,
 };
-
+} //namespace WavFile
