@@ -193,7 +193,7 @@ void MeasuringPage::start() {
 
 	timer.reset();
 	timer.start();
-	audioout.play_buzzer(200, 0.8f);
+	audioout.play_buzzer(100, 0.2f);
 	display();
 }
 
