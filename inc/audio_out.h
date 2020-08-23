@@ -25,7 +25,7 @@ public:
 	bool is_playing;
 
 private:
-	uint16_t buzzer_freq;
+	AnalogOut audiodac{PA_5};
 	PwmOut audioout{PE_5}; //PE_5
 	WavPlayer wav_player{audioout};
 	// std::function<void(void)> wav_callback;

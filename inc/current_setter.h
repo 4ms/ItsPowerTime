@@ -18,7 +18,7 @@ public:
 	void set_max_5V_mA(uint16_t mA);
 
 private:
-	PwmOut setN12A {PB_4}; //use PB_13 on p4
+	PwmOut setN12A {PE_5}; //p3: PB_4. p4: PB_13? or PE_5
 	PwmOut set5A {PB_7};
 	PwmOut set12A {PC_8};
 	PSProfile &ps;

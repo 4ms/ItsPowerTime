@@ -2,7 +2,7 @@
 
 struct CalibrationDefs {
 	const static inline PinName channelPins[]= {
-		PA_5, PC_3, PA_7,
+		PA_0, PC_3, PA_7, //p4: moved PA_5 to PA_0
 		PF_8, PC_2, PF_6
 	};
 	const static inline float adc_scaling[] {
