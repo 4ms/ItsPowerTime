@@ -388,7 +388,8 @@ CXX_FLAGS += -funsigned-char
 CXX_FLAGS += -MMD
 CXX_FLAGS += -fno-delete-null-pointer-checks
 CXX_FLAGS += -fomit-frame-pointer
-CXX_FLAGS += -Os
+#CXX_FLAGS += -Os
+OPT_FLAGS = -Os
 CXX_FLAGS += -g
 CXX_FLAGS += -DMBED_TRAP_ERRORS_ENABLED=1
 CXX_FLAGS += -mcpu=cortex-m4
@@ -479,6 +480,7 @@ LD_SYS_LIBS :=-specs=nosys.specs -Wl,--start-group -lstdc++ -lsupc++ -lm -lc -lg
 
 .PHONY: all lst size
 
+BUILD/src/audio_out.o: OPT_FLAGS = -O0
 
 all: $(BIN) $(HEX) size
 
@@ -502,8 +504,8 @@ $(OBJDIR)/%.o: %.c $(OBJDIR)/%.d
 
 $(OBJDIR)/%.o: %.cpp $(OBJDIR)/%.d
 	+@$(call MAKEDIR,$(dir $@))
-	+@echo "Compile: $(notdir $<)"
-	@$(CPP) $(CXX_FLAGS) $(INCLUDE_PATHS) -o $@ $<
+	+@echo "Compile: $(notdir $<) at $(OPT_FLAGS)"
+	@$(CPP) $(OPT_FLAGS) $(CXX_FLAGS) $(INCLUDE_PATHS) -o $@ $<
 
 $(OBJDIR)/$(PROJECT).link_script.ld: $(LINKER_SCRIPT)
 	@$(PREPROC) $< -o $@
