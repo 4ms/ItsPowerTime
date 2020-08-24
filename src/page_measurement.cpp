@@ -126,9 +126,9 @@ void MeasuringPage::check_for_failures() {
 		//for (auto &chan : AdcChannelList)
 		//    check_for_failure(chan);
 		//    void check_for_failure(AdcChannel chan) {
-		//        expected_val = ps.val[chan]; 
+		//        expected_val = ps.val[chan];
 		//        tolerance = ps.tolerance[chan];
-		//    // PSProfile { 
+		//    // PSProfile {
 		// 		PSPRofileID psPRofileID;
 		//    	float val[NumAdcChannels];
 		//    	float tolerance[NumAdcChannels];
@@ -138,7 +138,7 @@ void MeasuringPage::check_for_failures() {
 		//    	const PSProfile psPRofileArray[] = {
 		// 	      {Pod20, {12.0F, 5.0F, 12.0F, 700, 1000, 280}, {1.0, 1.0, 1.0, 100, 100, 50}, 10*60},
 		//    	}
-		//    	
+		//
 		check_for_failure(AdcChannels::voltage12V, 12.0F, kVoltageTolerance);
 		check_for_failure(AdcChannels::voltage5V, 5.0F, kVoltageTolerance);
 		check_for_failure(AdcChannels::voltageN12V, 12.0F, kVoltageTolerance);
@@ -180,8 +180,10 @@ void MeasuringPage::check_for_failure(AdcChannels chan, float expected_val, floa
 }
 
 void MeasuringPage::handle_startup_sound() {
-	if (timer.read_ms() >= 100)
+	if (timer.read_ms() >= 200 && startup_sound_playing) {
 		audioout.stop();
+		startup_sound_playing = false;
+	}
 }
 
 void MeasuringPage::start() {
@@ -194,6 +196,7 @@ void MeasuringPage::start() {
 	timer.reset();
 	timer.start();
 	audioout.play_buzzer(100, 0.2f);
+	startup_sound_playing = true;
 	display();
 }
 

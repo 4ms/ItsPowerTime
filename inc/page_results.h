@@ -13,7 +13,7 @@ public:
 	ResultsPage();
 	virtual void display();
 	virtual void start();
-	virtual void update();
+	void update();
 	void cleanup();
 
 	void set_results(ResultType *results);
@@ -28,7 +28,7 @@ protected:
 	uint32_t flash_fg_color;
 	uint32_t bg_col;
 	char result_string[5];
-
+	bool sound_playing;
 	ResultType *test_results;
 };
 
@@ -37,7 +37,6 @@ public:
 	FailResultsPage();
 	virtual void display();
 	virtual void start();
-	virtual void update();
 private:
 	void display_result(AdcChannels chan);
 };
@@ -47,5 +46,4 @@ public:
 	PassResultsPage();
 	virtual void display();
 	virtual void start();
-	virtual void update();
 };

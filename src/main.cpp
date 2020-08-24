@@ -195,7 +195,7 @@ public:
 			case (SHOW_FAIL_RESULTS): {
 				failResultPage.update();
 				if (failResultPage.continue_but.is_just_released()) {
-					passResultPage.cleanup();
+					failResultPage.cleanup();
 					transition_to(MAIN_SCREEN);
 				}
 				break;

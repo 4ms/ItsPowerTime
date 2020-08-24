@@ -474,13 +474,14 @@ LD_FLAGS :=-Wl,--gc-sections \
 	-DMBED_ROM_SIZE=0x200000 -DMBED_RAM1_START=0x10000000 -DMBED_RAM1_SIZE=0x10000 -DMBED_RAM_START=0x20000000 -DMBED_RAM_SIZE=0x30000 -DMBED_BOOT_STACK_SIZE=4096 -DXIP_ENABLE=0
 LD_SYS_LIBS :=-specs=nosys.specs -Wl,--start-group -lstdc++ -lsupc++ -lm -lc -lgcc -lnosys -lmbed -Wl,--end-group
 
+
 # Tools and Flags
 ###############################################################################
 # Rules
 
 .PHONY: all lst size
 
-BUILD/src/audio_out.o: OPT_FLAGS = -O0
+#OPT_FLAGS = -O0
 
 all: $(BIN) $(HEX) size
 

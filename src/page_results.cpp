@@ -93,12 +93,14 @@ void ResultsPage::start() {
 void FailResultsPage::start() {
 	ResultsPage::start();
 	//audio.play_wav(WavLibrary::get_sound(WavLibrary::Fail));
-	audio.play_wav(WavFile::chirp_400_200, 8000, 16000.0f);
+	audio.play_wav_looping(WavFile::chirp_400_200, 8000, 16000.0f);
+	sound_playing = true;
 }
 
 void PassResultsPage::start() {
 	ResultsPage::start();
 	audio.play_buzzer(200, 0.8f);
+	sound_playing = true;
 }
 
 void ResultsPage::cleanup() {
@@ -114,14 +116,10 @@ void ResultsPage::update() {
 
 		timer.last_time_read = timer.read_ms();
 	}
+	if (sound_playing && timer.read_ms() >= 5000) {
+		audio.stop();
+		sound_playing = false;
+	}
 	continue_but.update();
-}
-
-void FailResultsPage::update() {
-	ResultsPage::update();
-}
-
-void PassResultsPage::update() {
-	ResultsPage::update();
 }
 

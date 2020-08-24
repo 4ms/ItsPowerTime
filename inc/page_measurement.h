@@ -43,6 +43,7 @@ protected:
 	AudioOutput audioout;
 
 private:
+	bool startup_sound_playing;
 	bool did_fail;
 	bool did_pass;
 };

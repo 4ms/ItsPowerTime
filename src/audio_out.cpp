@@ -59,7 +59,7 @@ void WavPlayer::stop() {
 void BuzzerPlayer::start(float frequency, float amplitude) {
 	current_sample = 0.0f;
 	amp = (amplitude > 1.0f) ? 1.0f : ((amplitude < 0.0f) ? 0.0f : amplitude);
-	uint32_t period_us = static_cast<uint32_t>(1000000.0f / frequency); 
+	uint32_t period_us = static_cast<uint32_t>(1000000.0f / frequency);
 	period_us = period_us / 2; //two flips per period
 	auto cb = callback(this, &BuzzerPlayer::play_next_sample);
 	callback_timer.attach_us(cb, period_us);
