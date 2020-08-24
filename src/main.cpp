@@ -25,7 +25,21 @@ public:
 	AppStates app_state;
 
 	PSProfile active_ps;
-	CurrentSetter currentSetter {active_ps};
+	PSProfileID active_ps_id;
+
+	struct CurrentSetter {
+		CurrentSetter(PSProfile &ps) : active_ps{ps} {}
+		CurrentSetCtl<CurrentSetPins::pin[Set12V], CurrentSetPins::pin[Set5V], CurrentSetPins::pin[SetN12V]> currentSetDriver;
+		void start() {	
+			currentSetDriver.set_val(Set5V, active_ps.mA_5V);
+			currentSetDriver.set_val(Set12V, active_ps.mA_12V);
+			currentSetDriver.set_val(SetN12V, active_ps.mA_N12V);
+		}
+		void stop() { currentSetDriver.stop(); }
+		void update() { start(); }
+	private:
+		PSProfile &active_ps;
+	} currentSetter{active_ps};
 
 	MainPage mainPage;
 	ConfigPage configPage;
@@ -78,7 +92,7 @@ public:
 					new_state = MANUAL_MEASURING;
 					transition_to(new_state);
 				} else {
-					//active_ps = psProfileArray[ctive_ps.psProfileID]; //reload
+					active_ps = psProfileArray[active_ps_id]; //reload
 					currentSetter.start();
 					measuringPage.start();
 				}
@@ -132,6 +146,7 @@ public:
 				for (auto &but : configPage.ps_buts) {
 					if (but.is_just_released()) {
 						active_ps = psProfileArray[but.ps_index];
+						active_ps_id = but.ps_index;
 						transition_to(MAIN_SCREEN);
 					}
 				}
@@ -160,7 +175,7 @@ public:
 
 			case (MANUAL_MEASURING): {
 				manualPage.update();
-				currentSetter.update_outputs();
+				currentSetter.update();
 				if (manualPage.stop_but.is_just_released()) {
 					manualPage.cleanup();
 					transition_to(MAIN_SCREEN);
@@ -187,6 +202,8 @@ public:
 			}
 		}
 	}
+
+private:
 };
 
 int main() {

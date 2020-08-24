@@ -40,3 +40,10 @@ enum CurrentSetChannels : uint8_t {
 	SetN12V = 2
 };
 
+struct CurrentSetPins {
+	static constexpr inline PinName pin[3] = {PE_5, PB_7, PC_8};
+	// static const inline PinName Set12VPin = PE_5;
+	// static const inline PinName Set5VPin = PB_7;
+	// static const inline PinName SetN12VPin = PC_8;
+};
+

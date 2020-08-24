@@ -2,28 +2,42 @@
 
 #include "mbed.h"
 #include "ps_profiles.h"
+#include "calibration_defs.h"
 
 using namespace PSProfiles;
-//Todo: ctor of CurrentSetter constructs PwmOut members and pin numbers are passed as args (so pin numbers can be stored in a central place)
-class CurrentSetter {
+//Todo: pass a calibration def object to CurrentSetCtl ctor
+//Todo: how can we construct a struct {PwmOut setter; uint16_t val;} from PinName... pinList ?
+//...then we could do for (auto & chan : channels) chan.val = 0.0f; chan.setter.write(chan.val)
+template <PinName ... pinList>
+class CurrentSetCtl {
 public:
-	CurrentSetter(PSProfile &psRef);
+	CurrentSetCtl()
+		: setter{pinList...}
+	{
+		for (auto & chan : setter) {
+			chan.write(0.0f);
+			chan.period_ms(1);
+		}
+	}
+	void set_val(uint8_t chan, uint16_t value) {
+		auto adjusted_val = adjust_output(value, CalibrationDefs::current_set_offset[chan], CalibrationDefs::current_set_max[chan]);
+		setter[chan].write(adjusted_val);
+	}
 
-	void start();
-	void update_outputs();
-	void stop();
-
-	void set_max_N12V_mA(uint16_t mA);
-	void set_max_12V_mA(uint16_t mA);
-	void set_max_5V_mA(uint16_t mA);
+	void stop() {
+		for (auto & chan : setter)
+			chan.write(0.0f);
+	}
 
 private:
-	PwmOut setN12A {PE_5};
-	PwmOut set5A {PB_7};
-	PwmOut set12A {PC_8};
-	PSProfile &ps;
-	PSProfile max_;
+	std::array<PwmOut, sizeof...(pinList)> setter;
 
-	float adjust_output(uint16_t unadjusted, int16_t offset, uint16_t max);
+	float adjust_output(uint16_t unadjusted, int16_t offset, uint16_t max) {
+		if (unadjusted < offset)
+			return 0.0f;
+		else
+			return ((float)unadjusted - (float)offset) / (float)max;
+	}
 };
+
 
