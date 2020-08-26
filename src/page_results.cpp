@@ -94,12 +94,13 @@ void FailResultsPage::start() {
 	ResultsPage::start();
 	//audio.play_wav(WavLibrary::get_sound(WavLibrary::Fail));
 	audio.play_wav_looping(WavFile::chirp_400_200, 8000, 16000.0f);
+	//audio.play_buzzer(400, 1.0f);
 	sound_playing = true;
 }
 
 void PassResultsPage::start() {
 	ResultsPage::start();
-	audio.play_buzzer(200, 0.8f);
+	audio.play_wav_looping(WavFile::dog, 17187, 22010.0f);
 	sound_playing = true;
 }
 
