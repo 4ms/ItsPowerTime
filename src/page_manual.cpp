@@ -84,27 +84,27 @@ void ManualMeasuringPage::update() {
 	n12_down.update();
 
 	if (p12_up.is_just_released()) {
-		ps.mA_12V = inc_mA(ps.mA_12V);
+		ps.chan[Rail_12V].target_mA = inc_mA(ps.chan[Rail_12V].target_mA);
 		display_ps_profile();
 	}
 	if (p12_down.is_just_released()) {
-		ps.mA_12V = dec_mA(ps.mA_12V);
+		ps.chan[Rail_12V].target_mA = dec_mA(ps.chan[Rail_12V].target_mA);
 		display_ps_profile();
 	}
 	if (p5_up.is_just_released()) {
-		ps.mA_5V = inc_mA(ps.mA_5V);
+		ps.chan[Rail_5V].target_mA = inc_mA(ps.chan[Rail_5V].target_mA);
 		display_ps_profile();
 	}
 	if (p5_down.is_just_released()) {
-		ps.mA_5V = dec_mA(ps.mA_5V);
+		ps.chan[Rail_5V].target_mA = dec_mA(ps.chan[Rail_5V].target_mA);
 		display_ps_profile();
 	}
 	if (n12_up.is_just_released()) {
-		ps.mA_N12V = inc_mA(ps.mA_N12V);
+		ps.chan[Rail_N12V].target_mA = inc_mA(ps.chan[Rail_N12V].target_mA);
 		display_ps_profile();
 	}
 	if (n12_down.is_just_released()) {
-		ps.mA_N12V = dec_mA(ps.mA_N12V);
+		ps.chan[Rail_N12V].target_mA = dec_mA(ps.chan[Rail_N12V].target_mA);
 		display_ps_profile();
 	}
 }

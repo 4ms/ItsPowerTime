@@ -56,16 +56,15 @@ void MeasuringPage::display() {
 }
 
 void MeasuringPage::display_ps_profile() {
-	char ma_string[6];
 	set_bg_color(LCD_COLOR_YELLOW);
 	set_fg_color(LCD_COLOR_BLACK);
 	set_font_size(FONT_SIZE_SMALL);
-	if (snprintf(ma_string, sizeof ma_string, "%4d", ps.mA_12V) >=0 )
-		display_string(1, 254, ma_string, RIGHT_MODE);
-	if (snprintf(ma_string, sizeof ma_string, "%4d", ps.mA_5V) >=0 )
-		display_string(1, 279, ma_string, RIGHT_MODE);
-	if (snprintf(ma_string, sizeof ma_string, "%4d", ps.mA_N12V) >=0 )
-		display_string(1, 304, ma_string, RIGHT_MODE);
+	int y_pos = 254;
+	int y_offset = 25;
+	for (auto & ch : ps.chan) {
+		display_int(1, y_pos, static_cast<int>(ch.element.target_mA) , "%4d", RIGHT_MODE);
+		y_pos += y_offset;
+	}
 }
 
 void MeasuringPage::display_measurements() {
@@ -123,34 +122,42 @@ void MeasuringPage::check_for_failures() {
 
 	if (timer.read_ms() >= kStabilizationTime) {
 		//Todo:
+		// need a "map" to connect AdcChannels to ps Rails
+		// ps.assign_adc(Rail_12V, VOLTAGE, AdcChannels::voltage12V);
+		//
 		//for (auto &chan : AdcChannelList)
 		//    check_for_failure(chan);
-		//    void check_for_failure(AdcChannel chan) {
-		//        expected_val = ps.val[chan];
-		//        tolerance = ps.tolerance[chan];
-		//    // PSProfile {
-		// 		PSPRofileID psPRofileID;
-		//    	float val[NumAdcChannels];
-		//    	float tolerance[NumAdcChannels];
-		//    	uint16_t test_time_s;
-		//    	}
 		//
-		//    	const PSProfile psPRofileArray[] = {
-		// 	      {Pod20, {12.0F, 5.0F, 12.0F, 700, 1000, 280}, {1.0, 1.0, 1.0, 100, 100, 50}, 10*60},
-		//    	}
+		// void check_for_failure(AdcChannel chan) {
+		// 		expected_val = ps.get_expected_reading(AdcChannels::voltage12V);
+		// 		tolerance = ps.get_tolerance(AdcChannels::voltage12V);
 		//
-		check_for_failure(AdcChannels::voltage12V, 12.0F, kVoltageTolerance);
-		check_for_failure(AdcChannels::voltage5V, 5.0F, kVoltageTolerance);
-		check_for_failure(AdcChannels::voltageN12V, 12.0F, kVoltageTolerance);
-		check_for_failure(AdcChannels::current12V, (float)ps.mA_12V, kCurrentTolerance);
-		check_for_failure(AdcChannels::current5V, (float)ps.mA_5V, kCurrentTolerance);
-		check_for_failure(AdcChannels::currentN12V, (float)ps.mA_N12V, kCurrentTolerance);
+
+		check_for_failure(AdcChannels::voltage12V, ps.chan[Rail_12V].target_V, kVoltageTolerance);
+		check_for_failure(AdcChannels::current12V, ps.chan[Rail_12V].target_mA, kCurrentTolerance);
+		check_for_failure(AdcChannels::voltage5V, ps.chan[Rail_5V].target_V, kVoltageTolerance);
+		check_for_failure(AdcChannels::current5V, ps.chan[Rail_5V].target_mA, kCurrentTolerance);
+		check_for_failure(AdcChannels::voltageN12V, ps.chan[Rail_N12V].target_V, kVoltageTolerance);
+		check_for_failure(AdcChannels::currentN12V, ps.chan[Rail_N12V].target_mA, kCurrentTolerance);
+
 	} else {
 		measurer.reset_all_minmax();
 	}
 }
 
 //Todo: Checker class
+
+// class TestChecker {
+// 	TestChecker (TestResults &results, MeasurementReader &measurer) :
+// 		results(results)
+// 	{}
+// 	void register_fail(AdcChannels chan, float bad_value, ResultType::FailCode code);
+// 	void check_for_failure(AdcChannels chan, float expected_val, float tolerance);
+// 	TestResults &results;
+// 	MeasurementReader &measurer;
+// 	bool did_fail;
+// 	bool did_pass;
+// };
 void MeasuringPage::register_fail(AdcChannels chan, float bad_value, ResultType::FailCode code) {
 	did_fail = true;
 	results[chan].passed = false;
