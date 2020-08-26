@@ -38,6 +38,8 @@ void WavPlayer::start(const uint8_t *const wavdata, const uint32_t num_samples, 
 
 void WavPlayer::play_next_sample() {
 	float sample = (float)(data[idx]) / 255.0f;
+	float gain = 1*.0f;
+	sample *= gain;
 	audiodac.write(sample);
 	if (++idx >= size) {
 		if (looping) {
