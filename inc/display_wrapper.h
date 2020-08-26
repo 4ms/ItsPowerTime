@@ -19,6 +19,14 @@ void display_string(uint16_t X, uint16_t Y, std::string_view /*const char **/pTe
 void display_string_centered(uint16_t line, const char *pText);
 void display_int(uint16_t X, uint16_t Y, int number, const char *format, Text_AlignModeTypdef mode);
 void display_float(uint16_t X, uint16_t Y, float number, const char *format, Text_AlignModeTypdef mode);
+
+template<typename T>
+void display_number(uint16_t X, uint16_t Y, T number, const char *format, Text_AlignModeTypdef mode) {
+	char num_string[30];
+	if (snprintf(num_string, sizeof num_string, format, number) >=0 )
+		display_string(X, Y, num_string, mode);
+}
+
 uint32_t get_display_size_x();
 uint32_t get_display_size_y();
 uint16_t get_font_line_height(FontSizes size);
