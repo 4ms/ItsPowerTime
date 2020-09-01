@@ -371,7 +371,7 @@ CXX_FLAGS += -DTARGET_RELEASE
 CXX_FLAGS += -DMBED_BUILD_TIMESTAMP=1584399854.9657936
 CXX_FLAGS += -include
 CXX_FLAGS += mbed_config.h
-CXX_FLAGS += -std=gnu++17
+CXX_FLAGS += -std=gnu++2a
 CXX_FLAGS += -fno-rtti
 CXX_FLAGS += -Wvla
 CXX_FLAGS += -c

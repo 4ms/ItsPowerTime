@@ -17,13 +17,14 @@ public:
 private:
 	float raw_reading(uint8_t chan);
 
+	//Todo: how to initialize the elements of an array of one class with elements of another array of another class?
 	AnalogIn adcs[6] {
-		CalibrationDefs::channelPins[AdcChannels::voltage12V],
-		CalibrationDefs::channelPins[AdcChannels::voltage5V],
-		CalibrationDefs::channelPins[AdcChannels::voltageN12V],
-		CalibrationDefs::channelPins[AdcChannels::current12V],
-		CalibrationDefs::channelPins[AdcChannels::current5V],
-		CalibrationDefs::channelPins[AdcChannels::currentN12V]
+		channelPins[AdcChannels::voltage12V],
+		channelPins[AdcChannels::voltage5V],
+		channelPins[AdcChannels::voltageN12V],
+		channelPins[AdcChannels::current12V],
+		channelPins[AdcChannels::current5V],
+		channelPins[AdcChannels::currentN12V]
 	};
 	SimpleAverage averages[6];
 	float maxes[6] = {-999999999.F};

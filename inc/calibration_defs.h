@@ -1,24 +1,32 @@
 #pragma once
+#include "channel_defs.h"
 
 struct CalibrationDefs {
-	const static inline PinName channelPins[]= {
-		PA_0, PC_3, PA_7, //p4: moved PA_5 to PA_0
-		PF_8, PC_2, PF_6
-	};
-	const static inline float adc_scaling[] {
-		17.89f, 17.217f, 19.97f,
-		2745.0f, 2811.0f, 2852.0f
-	};
-	const static inline float adc_offset[] {
-		0.0f, 0.f, 0.f,
-		16.f, 9.f, 0.f
-	};
-
-	const static inline uint16_t current_set_max[] {
-		2740, 2811, 2559
-	};
-	const static inline int16_t current_set_offset[] {
-		30, 23, 15
-	};
+	const static inline SequentialMap<AdcChannels, float, 6> adc_scaling = {{{
+		{voltage12V, 	19.0f},
+		{voltage5V, 	16.93f},
+		{voltageN12V, 	20.12f},
+		{current12V, 	2745.0f},
+		{current5V, 	2811.0f},
+		{currentN12V, 	2852.0f},
+	}}};
+	const static inline SequentialMap<AdcChannels, float, 6> adc_offset = {{{
+		{voltage12V, 	0.f},
+		{voltage5V, 	0.f},
+		{voltageN12V, 	0.f},
+		{current12V, 	16.f},
+		{current5V, 	9.f},
+		{currentN12V, 	0.f},
+	}}};
+	const static inline SequentialMap<CurrentSetChannel, uint16_t, 3> current_set_max = {{{
+		{Set12V, 2740},
+		{Set5V,  2811},
+		{SetN12V,2559}
+	}}};
+	const static inline SequentialMap<CurrentSetChannel, uint16_t, 3> current_set_offset = {{{
+		{Set12V, 30},
+		{Set5V,  23},
+		{SetN12V,15}
+	}}};
 };
 

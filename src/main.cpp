@@ -29,7 +29,7 @@ public:
 
 	struct CurrentSetter {
 		CurrentSetter(PSProfile &ps) : active_ps{ps} {}
-		CurrentSetCtl<CurrentSetPins::pin[Set12V], CurrentSetPins::pin[Set5V], CurrentSetPins::pin[SetN12V]> currentSetDriver;
+		CurrentSetCtl<3> currentSetDriver{CurrentSetPins::pin[Set12V], CurrentSetPins::pin[Set5V], CurrentSetPins::pin[SetN12V]};
 		void start() {
 			currentSetDriver.set_val(Set5V, active_ps.chan[Rail_5V].target_mA);
 			currentSetDriver.set_val(Set12V, active_ps.chan[Rail_12V].target_mA);

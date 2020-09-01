@@ -8,18 +8,19 @@ using namespace PSProfiles;
 //Todo: pass a calibration def object to CurrentSetCtl ctor
 //Todo: how can we construct a struct {PwmOut setter; uint16_t val;} from PinName... pinList ?
 //...then we could do for (auto & chan : channels) chan.val = 0.0f; chan.setter.write(chan.val)
-template <PinName ... pinList>
+template <unsigned int N>
 class CurrentSetCtl {
 public:
-	CurrentSetCtl()
-		: setter{pinList...}
+	template <typename... T>
+	CurrentSetCtl(T... ts)
+		: setter{ts...}
 	{
 		for (auto & chan : setter) {
 			chan.write(0.0f);
 			chan.period_ms(1);
 		}
 	}
-	void set_val(uint8_t chan, uint16_t value) {
+	void set_val(CurrentSetChannel chan, uint16_t value) {
 		auto adjusted_val = adjust_output(value, CalibrationDefs::current_set_offset[chan], CalibrationDefs::current_set_max[chan]);
 		setter[chan].write(adjusted_val);
 	}
@@ -30,7 +31,7 @@ public:
 	}
 
 private:
-	std::array<PwmOut, sizeof...(pinList)> setter;
+	std::array<PwmOut, N> setter;
 
 	float adjust_output(uint16_t unadjusted, int16_t offset, uint16_t max) {
 		if (unadjusted < offset)

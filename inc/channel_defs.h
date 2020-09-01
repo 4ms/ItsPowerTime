@@ -1,10 +1,24 @@
 #pragma once
+#include "util/sequential_map.hh"
 
 enum AdcChannels : uint8_t {
-	voltage12V, voltage5V, voltageN12V,
-	current12V, current5V, currentN12V,
+	voltage12V,
+	voltage5V,
+	voltageN12V,
+	current12V,
+	current5V,
+	currentN12V,
 	numChannels
 };
+
+const SequentialMap<AdcChannels, PinName, 6> channelPins = {{{
+	{voltage12V, PA_0},
+	{voltage5V, PC_3},
+	{voltageN12V, PA_7},
+	{current12V, PF_8},
+	{current5V, PC_2},
+	{currentN12V, PF_6},
+}}};
 
 struct AdcChannelNames {
 	static void get_string(AdcChannels chan, char *str) {
@@ -34,16 +48,17 @@ struct AdcChannelNames {
 	}
 };
 
-enum CurrentSetChannels : uint8_t {
-	Set12V = 0,
-	Set5V = 1,
-	SetN12V = 2
+enum CurrentSetChannel : uint8_t {
+	Set12V,
+	Set5V,
+	SetN12V
 };
 
 struct CurrentSetPins {
-	static constexpr inline PinName pin[3] = {PC_8, PB_7, PE_5};
-	// static const inline PinName Set12VPin = PE_5;
-	// static const inline PinName Set5VPin = PB_7;
-	// static const inline PinName SetN12VPin = PC_8;
+	static constexpr inline SequentialMap<CurrentSetChannel, PinName, 3> pin = {{{
+		{Set12V, PC_8},
+		{Set5V,  PB_7},
+		{SetN12V, PE_5},
+	}}};
 };
 

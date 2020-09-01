@@ -12,7 +12,7 @@ ConfigPage::ConfigPage() {
 	uint16_t cur_row = 0;
 	uint16_t cur_col = 0;
 	
-	for (auto &ps : psProfileArray.data) {
+	for (auto &ps : psProfileArray) {
 		auto &but = ps_buts[ps.key];
 		but.ps_index = ps.key;
 		but.rect.x = cur_col * (width + x_spacing);
@@ -20,7 +20,8 @@ ConfigPage::ConfigPage() {
 		but.rect.width = width;
 		but.rect.height = height;
 		but.rect.radius = 3;
-		but.text = psProfileArray[ps.key].name;
+		//but.text = psProfileArray[ps.key].name;
+		but.text = ps.element.name;
 		if (but.text.length() > 9)
 			but.fontsize = FONT_SIZE_VERY_SMALL;
 		else
