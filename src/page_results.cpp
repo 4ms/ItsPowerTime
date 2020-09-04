@@ -93,8 +93,8 @@ void ResultsPage::start() {
 void FailResultsPage::start() {
 	ResultsPage::start();
 	//audio.play_wav(WavLibrary::get_sound(WavLibrary::Fail));
-	audio.play_wav_looping(WavFile::chirp_400_200, 8000, 16000.0f);
-	//audio.play_buzzer(400, 1.0f);
+	//audio.play_wav_looping(WavFile::chirp_400_200, 8000, 16000.0f);
+	audio.play_buzzer(400, 1.0f);
 	sound_playing = true;
 }
 
