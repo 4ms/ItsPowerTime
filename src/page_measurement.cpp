@@ -176,11 +176,11 @@ void MeasuringPage::check_for_failure(AdcChannels chan, float expected_val, floa
 			register_fail(chan, actual_val, ResultType::FailCode::AVERAGE_TOO_LOW);
 		}
 		actual_val = measurer.get_max(chan);
-		if ((actual_val - expected_val) > tolerance) {
+		if ((actual_val - expected_val) > tolerance*2.f) {
 			register_fail(chan, actual_val, ResultType::FailCode::SPIKE);
 		}
 		actual_val = measurer.get_min(chan);
-		if ((expected_val - actual_val) > tolerance) {
+		if ((expected_val - actual_val) > tolerance*2.f) {
 			register_fail(chan, actual_val, ResultType::FailCode::DIP);
 		}
 	}
