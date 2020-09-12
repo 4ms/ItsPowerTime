@@ -1,7 +1,10 @@
-clang++
+clang
 %h -x
 %h c++-header
-%cpp -std=gnu++17
+%cpp -std=c++17
+%cc -std=c++17
+%h -std=c++17
+%hh -std=c++17
 -isystem
 /usr/local/Cellar/arm-none-eabi-gcc/8-2018-q4-major/gcc/arm-none-eabi/include/c++/8.2.1
 -I/usr/local/Cellar/arm-none-eabi-gcc/8-2018-q4-major/gcc/arm-none-eabi/include/c++/8.2.1

@@ -23,7 +23,6 @@ public:
 		SHOW_PASS_RESULTS,
 	};
 	AppStates app_state;
-
 	PSProfile active_ps;
 	PSProfileID active_ps_id;
 

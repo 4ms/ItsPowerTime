@@ -11,13 +11,13 @@ void AudioOutput::play_buzzer(float frequency, float amplitude) {
 void AudioOutput::play_wav(const uint8_t * const wavdata, const uint32_t num_samples, const float sample_freq) {
 	buzzer_player.stop();
 	wav_player.looping = false;
-	wav_player.start(wavdata, num_samples, sample_freq);
+	wav_player.start(wavdata, num_samples, sample_freq, gain);
 }
 
 void AudioOutput::play_wav_looping(const uint8_t * const wavdata, const uint32_t num_samples, const float sample_freq) {
 	buzzer_player.stop();
 	wav_player.looping = true;
-	wav_player.start(wavdata, num_samples, sample_freq);
+	wav_player.start(wavdata, num_samples, sample_freq, gain);
 }
 
 void AudioOutput::stop() {
@@ -27,19 +27,23 @@ void AudioOutput::stop() {
 
 // WavPlayer
 
-void WavPlayer::start(const uint8_t *const wavdata, const uint32_t num_samples, const float sample_freq) {
+void WavPlayer::start(const uint8_t *const wavdata, const uint32_t num_samples, const float sample_freq, const float g) {
 	idx = 0;
 	size = num_samples;
 	data = wavdata;
+	gain = g;
 	uint32_t period_us = static_cast<uint32_t>(1000000.0f / sample_freq);
 	auto cb = callback(this, &WavPlayer::play_next_sample);
 	callback_timer.attach_us(cb, period_us);
 }
 
+void AudioOutput::set_gain(float g) {
+	gain = g;
+}
+
 void WavPlayer::play_next_sample() {
 	float sample = (float)(data[idx]) / 255.0f;
-	float gain = 1.f;
-	sample *= gain;
+	sample = (sample - 0.5) * gain + 0.5;
 	audiodac.write(sample);
 	if (++idx >= size) {
 		if (looping) {

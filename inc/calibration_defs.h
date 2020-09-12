@@ -4,11 +4,11 @@
 struct CalibrationDefs {
 	static inline SequentialMap<AdcChannels, float, 6> adc_scaling = {{{
 		{voltage12V, 	19.16f},
-		{voltage5V, 	18.35f},//16.93f},
-		{voltageN12V, 	20.46f},
-		{current12V, 	2472.f},//2435.f},//2745.0f},
-		{current5V, 	2468.f},//2811.0f},
-		{currentN12V, 	2667.f},
+		{voltage5V, 	17.00f},
+		{voltageN12V, 	20.81f},
+		{current12V, 	2022.f},
+		{current5V, 	2340.f},
+		{currentN12V, 	2508.f},
 	}}};
 	static inline SequentialMap<AdcChannels, float, 6> adc_offset = {{{
 		{voltage12V, 	0.f},
@@ -19,9 +19,9 @@ struct CalibrationDefs {
 		{currentN12V, 	0.f},
 	}}};
 	static inline SequentialMap<CurrentSetChannel, uint16_t, 3> current_set_max = {{{
-		{Set12V, 2229},
-		{Set5V,  2229},
-		{SetN12V,2229}
+		{Set12V, 1813},
+		{Set5V,  2131},
+		{SetN12V,2090}
 	}}};
 	static inline SequentialMap<CurrentSetChannel, uint16_t, 3> current_set_offset = {{{
 		{Set12V, 11},
