@@ -1,6 +1,10 @@
 #include "TS_DISCO_F429ZI.h"
 #include "button.h"
 
+//TS returns flipped Y coordinates in rev E (not in rev B)
+//MV1075E appear to all be blue PCBs, vs older rev B are green
+#define PCB_IS_MB1075E
+
 static TS_DISCO_F429ZI ts;
 static uint32_t notouch_ctr = 0;
 static uint16_t last_x = 0, last_y = 0;
@@ -18,7 +22,11 @@ bool ts_is_touch_detected(uint16_t &x, uint16_t &y) {
     if (TS_State.TouchDetected) {
         notouch_ctr = 0;
         x = TS_State.X;
+#ifdef PCB_IS_MB1075E
+        y = 320 - TS_State.Y;
+#else
         y = TS_State.Y;
+#endif
         last_x = x;
         last_y = y;
         return true;
