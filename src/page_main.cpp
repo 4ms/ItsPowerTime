@@ -47,9 +47,51 @@ void MainPage::display() {
 	manual_but.draw();
 }
 
+void MainPage::display_one_rail(float val, float expected_val, int pos_x, int pos_y) {
+	const float kTolerance = 1.0f;
+	if (fabsf(val - expected_val) < kTolerance) {
+		set_bg_color(LCD_COLOR_GREEN);
+		set_fg_color(LCD_COLOR_BLACK);
+	} else {
+		set_bg_color(LCD_COLOR_RED);
+		set_fg_color(LCD_COLOR_WHITE);
+	}
+
+	set_font_size(FONT_SIZE_MED);
+
+	char reading_string[8];
+	if ( sprintf(reading_string, " %04.1fV", val) >= 0 )
+		display_string(pos_x, pos_y, reading_string, LEFT_MODE);
+
+}
+
+void MainPage::display_measurements() {
+	display_one_rail(measurer.get_average(AdcChannels::voltage12V), 12.0f, 80, 190);
+	display_one_rail(measurer.get_average(AdcChannels::voltage5V), 5.0f, 80, 210);
+	display_one_rail(measurer.get_average(AdcChannels::voltageN12V), 12.0f, 80, 230);
+	display_string(70, 230, "-", LEFT_MODE);
+}
+
 void MainPage::update() {
 	start_but.update();
 	config_but.update();
 	manual_but.update();
+
+	if (timer.read_ms() > timer.last_time_read) {
+		timer.last_time_read = timer.read_ms();
+
+		if ((timer.last_time_read % 50) == 0) {
+			display_measurements();
+			measurer.reset_all_averages();
+		} else {
+			measurer.update_all_averages();
+		}
+	}
 }
 
+
+void MainPage::start() {
+	timer.reset();
+	timer.start();
+	display_measurements();
+}

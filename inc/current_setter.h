@@ -21,7 +21,7 @@ public:
 		}
 	}
 	void set_val(CurrentSetChannel chan, uint16_t value) {
-		auto adjusted_val = adjust_output(value, CalibrationDefs::current_set_offset[chan], CalibrationDefs::current_set_max[chan]);
+		auto adjusted_val = adjust_output((int16_t)value, CalibrationDefs::current_set_offset[chan], CalibrationDefs::current_set_max[chan]);
 		setter[chan].write(adjusted_val);
 	}
 
@@ -33,7 +33,7 @@ public:
 private:
 	std::array<PwmOut, N> setter;
 
-	float adjust_output(uint16_t unadjusted, int16_t offset, uint16_t max) {
+	float adjust_output(int16_t unadjusted, int16_t offset, uint16_t max) {
 		if (unadjusted < offset)
 			return 0.0f;
 		else

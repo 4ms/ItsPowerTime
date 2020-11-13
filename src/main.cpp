@@ -79,6 +79,7 @@ public:
 			case (MAIN_SCREEN):
 				mainPage.psname = active_ps.name;
 				currentSetter.stop();
+				mainPage.start();
 				mainPage.display();
 				break;
 

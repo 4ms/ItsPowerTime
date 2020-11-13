@@ -43,7 +43,7 @@ struct PSProfile {
 const SequentialMap<PSProfileID, PSProfile, kNumPSProfiles> psProfileArray = {{{
 	{ RP25, {
 		.name = "RP 25",
-		.test_time_s = 5*60,
+		.test_time_s = 1*60,
 		.chan = {{{
 			{ Rail_12V, {
 				.name = "+12V",
@@ -64,7 +64,7 @@ const SequentialMap<PSProfileID, PSProfile, kNumPSProfiles> psProfileArray = {{{
 	}},
 	{ RP35, {
 		.name = "RP 35",
-		.test_time_s = 5*60,
+		.test_time_s = 2*60,
 		.chan = {{{
 			{ Rail_12V, {
 				.name = "+12V",
@@ -85,7 +85,7 @@ const SequentialMap<PSProfileID, PSProfile, kNumPSProfiles> psProfileArray = {{{
 	}},
 	{ RP45, {
 		.name = "RP 45",
-		.test_time_s = 5*60,
+		.test_time_s = 2*60,
 		.chan = {{{
 			{ Rail_12V, {
 				.name = "+12V",
@@ -106,7 +106,7 @@ const SequentialMap<PSProfileID, PSProfile, kNumPSProfiles> psProfileArray = {{{
 	}},
 	{ Pod20_26_32, {
 		.name = "Pod 20-32",
-		.test_time_s = 2*60,
+		.test_time_s = 1*60,
 		.chan = {{{
 			{ Rail_12V, {
 				.name = "+12V",
@@ -127,7 +127,7 @@ const SequentialMap<PSProfileID, PSProfile, kNumPSProfiles> psProfileArray = {{{
 	}},
 	{ PodX_60, {
 		.name = "PodX/60",
-		.test_time_s = 2*60,
+		.test_time_s = 1*60,
 		.chan = {{{
 			{ Rail_12V, {
 				.name = "+12V",
@@ -148,7 +148,7 @@ const SequentialMap<PSProfileID, PSProfile, kNumPSProfiles> psProfileArray = {{{
 	}},
 	{ Old_Pod20_26_32, {
 		.name = "Old Pod 20-32",
-		.test_time_s = 10,
+		.test_time_s = 60,
 		.chan = {{{
 			{ Rail_12V, {
 				.name = "+12V",
@@ -169,7 +169,7 @@ const SequentialMap<PSProfileID, PSProfile, kNumPSProfiles> psProfileArray = {{{
 	}},
 	{ Old_Pod_Dbl_Nrw, {
 		.name = "Old PodDbl/Nar",
-		.test_time_s = 2*60,
+		.test_time_s = 60,
 		.chan = {{{
 			{ Rail_12V, {
 				.name = "+12V",
@@ -190,7 +190,7 @@ const SequentialMap<PSProfileID, PSProfile, kNumPSProfiles> psProfileArray = {{{
 	}},
 	{ Old_Pod_60_2PCBS, {
 		.name = "Old Pod60 two PCB",
-		.test_time_s = 2*60,
+		.test_time_s = 60,
 		.chan = {{{
 			{ Rail_12V, {
 				.name = "+12V",
