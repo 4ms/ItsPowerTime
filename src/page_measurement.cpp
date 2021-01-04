@@ -2,8 +2,7 @@
 #include "display_wrapper.h"
 
 MeasuringPage::MeasuringPage(PSProfile &psRef)
-: ps{psRef}
-{
+	: ps{psRef} {
 	stop_but.rect.x = 60;
 	stop_but.rect.y = 140;
 	stop_but.rect.width = 120;
@@ -36,7 +35,7 @@ void MeasuringPage::display() {
 	set_font_size(FONT_SIZE_SMALL);
 	display_string(0, 254, "Set +12 mA: ", LEFT_MODE);
 	display_string(0, 279, "Set +5 mA: ", LEFT_MODE);
-	display_string(0, 304 , "Set -12 mA: ", LEFT_MODE);
+	display_string(0, 304, "Set -12 mA: ", LEFT_MODE);
 	display_ps_profile();
 
 	set_font_size(FONT_SIZE_MED);
@@ -61,8 +60,8 @@ void MeasuringPage::display_ps_profile() {
 	set_font_size(FONT_SIZE_SMALL);
 	int y_pos = 254;
 	int y_offset = 25;
-	for (auto & ch : ps.chan) {
-		display_int(1, y_pos, static_cast<int>(ch.element.target_mA) , "%4d", RIGHT_MODE);
+	for (auto &ch : ps.chan) {
+		display_int(1, y_pos, static_cast<int>(ch.element.target_mA), "%4d", RIGHT_MODE);
 		y_pos += y_offset;
 	}
 }
@@ -73,27 +72,26 @@ void MeasuringPage::display_measurements() {
 	set_fg_color(LCD_COLOR_BLUE);
 	set_font_size(FONT_SIZE_SMALL);
 
-	if ( sprintf(reading_string, "%2.2f", measurer.get_average(AdcChannels::voltage12V)) >= 0 )
+	if (sprintf(reading_string, "%2.2f", measurer.get_average(AdcChannels::voltage12V)) >= 0)
 		display_string(55, LINE(5), reading_string, LEFT_MODE);
-	if ( sprintf(reading_string, "%2.2f", measurer.get_average(AdcChannels::voltage5V)) >= 0 )
+	if (sprintf(reading_string, "%2.2f", measurer.get_average(AdcChannels::voltage5V)) >= 0)
 		display_string(65, LINE(6), reading_string, LEFT_MODE);
-	if ( sprintf(reading_string, "%2.2f", measurer.get_average(AdcChannels::voltageN12V)) >= 0 )
+	if (sprintf(reading_string, "%2.2f", measurer.get_average(AdcChannels::voltageN12V)) >= 0)
 		display_string(55, LINE(7), reading_string, LEFT_MODE);
 
-	if ( sprintf(reading_string, "%4d", (uint16_t)measurer.get_average(AdcChannels::current12V)) >= 0 )
+	if (sprintf(reading_string, "%4d", (uint16_t)measurer.get_average(AdcChannels::current12V)) >= 0)
 		display_string(215, LINE(5), reading_string, RIGHT_MODE);
-	if ( sprintf(reading_string, "%4d", (uint16_t)measurer.get_average(AdcChannels::current5V)) >= 0 )
+	if (sprintf(reading_string, "%4d", (uint16_t)measurer.get_average(AdcChannels::current5V)) >= 0)
 		display_string(215, LINE(6), reading_string, RIGHT_MODE);
-	if ( sprintf(reading_string, "%4d", (uint16_t)measurer.get_average(AdcChannels::currentN12V)) >= 0 )
+	if (sprintf(reading_string, "%4d", (uint16_t)measurer.get_average(AdcChannels::currentN12V)) >= 0)
 		display_string(215, LINE(7), reading_string, RIGHT_MODE);
 }
-
 
 void MeasuringPage::update() {
 	stop_but.update();
 	if (timer.read_ms() > timer.last_time_read) {
 		timer.last_time_read = timer.read_ms();
-		display_time((float)timer.last_time_read/1000.0f);
+		display_time((float)timer.last_time_read / 1000.0f);
 
 		if ((timer.last_time_read % 50) == 0) {
 			display_measurements();
@@ -134,7 +132,11 @@ void MeasuringPage::check_for_failures() {
 		//
 
 		check_for_failure(AdcChannels::voltage12V, ps.chan[Rail_12V].target_V, kVoltageTolerance);
-		check_for_failure(AdcChannels::current12V, ps.chan[Rail_12V].target_mA, kCurrentTolerance);
+
+		//Workaround for ADC maxxing out at 1600mA on some units
+		float tol = (ps.chan[Rail_12V].target_mA > 1500) ? 500 : kCurrentTolerance;
+		check_for_failure(AdcChannels::current12V, ps.chan[Rail_12V].target_mA, tol);
+
 		check_for_failure(AdcChannels::voltage5V, ps.chan[Rail_5V].target_V, kVoltageTolerance);
 		check_for_failure(AdcChannels::current5V, ps.chan[Rail_5V].target_mA, kCurrentTolerance);
 		check_for_failure(AdcChannels::voltageN12V, ps.chan[Rail_N12V].target_V, kVoltageTolerance);
@@ -176,11 +178,11 @@ void MeasuringPage::check_for_failure(AdcChannels chan, float expected_val, floa
 			register_fail(chan, actual_val, ResultType::FailCode::AVERAGE_TOO_LOW);
 		}
 		actual_val = measurer.get_max(chan);
-		if ((actual_val - expected_val) > tolerance*2.f) {
+		if ((actual_val - expected_val) > tolerance * 2.f) {
 			register_fail(chan, actual_val, ResultType::FailCode::SPIKE);
 		}
 		actual_val = measurer.get_min(chan);
-		if ((expected_val - actual_val) > tolerance*2.f) {
+		if ((expected_val - actual_val) > tolerance * 2.f) {
 			register_fail(chan, actual_val, ResultType::FailCode::DIP);
 		}
 	}
