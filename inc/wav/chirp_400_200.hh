@@ -1,3 +1,4 @@
+#include <cstdint>
 namespace WavFile {
 
 /* chirp_400_200 */
